@@ -235,7 +235,7 @@ export function Projects() {
                 <div className="w-20 h-1 bg-accent mx-auto rounded-full" />
               </div>
 
-            <div className="max-w-xl mx-auto w-full">
+         <div className="max-w-xl mx-auto w-full">
                 <TableauCard project={curatedProjects[activeCuratedIndex]} isCurated />
                 {curatedProjects.length > 1 && (
                   <div className="flex justify-center gap-2 mt-4">
@@ -251,7 +251,8 @@ export function Projects() {
                   </div>
                 )}
               </div>
-          )}
+            </div>
+               )}
 
           {/* Python Projects Section */}
           {hasPythonProjects && (
