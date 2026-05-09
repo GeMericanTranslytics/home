@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { ExternalLink, X, BarChart3, Code2, Github, Star, User, Plus } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
@@ -34,6 +34,15 @@ interface PythonProject {
 
 export function Projects() {
   const [selectedTableau, setSelectedTableau] = useState<TableauProject | null>(null)
+  const [activeCuratedIndex, setActiveCuratedIndex] = useState(0)
+
+  useEffect(() => {
+    if (curatedProjects.length <= 1) return
+    const interval = setInterval(() => {
+      setActiveCuratedIndex((prev) => (prev + 1) % curatedProjects.length)
+    }, 30000)
+    return () => clearInterval(interval)
+  }, [])
 
   const isValidEmbedUrl = (url: string) => {
     return url && !url.includes("YOUR_TABLEAU") && !url.includes("YOUR_CURATED")
@@ -226,12 +235,22 @@ export function Projects() {
                 <div className="w-20 h-1 bg-accent mx-auto rounded-full" />
               </div>
 
-              <div className={`grid ${getGridCols(curatedProjects.length)} gap-6`}>
-                {curatedProjects.map((project, index) => (
-                  <TableauCard key={index} project={project} isCurated />
-                ))}
+            <div className="max-w-xl mx-auto w-full">
+                <TableauCard project={curatedProjects[activeCuratedIndex]} isCurated />
+                {curatedProjects.length > 1 && (
+                  <div className="flex justify-center gap-2 mt-4">
+                    {curatedProjects.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setActiveCuratedIndex(index)}
+                        className={`w-2.5 h-2.5 rounded-full transition-all ${
+                          activeCuratedIndex === index ? "bg-primary scale-125" : "bg-muted-foreground/40"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
           )}
 
           {/* Python Projects Section */}
