@@ -1,0 +1,178 @@
+{
+  "name": "Your Name",
+  "title": "German Localization & Speech Quality Analyst",
+  "profileImage": "/images/profile.jpg",
+  "tagline": "Speech Analytics | Text Analytics | German Localization | Quality Assurance",
+  "email": "your.email@example.com",
+  "location": "Salt Lake City, UT / Remote",
+  "github": "https://github.com/GeMericanTranslytics",
+  "linkedin": "https://linkedin.com/in/yourprofile",
+  
+  "sectionTitles": {
+    "about": "About Me",
+    "skills": "Skills & Expertise",
+    "experience": "Professional Experience",
+    "myTableauProjects": "My Tableau Projects",
+    "curatedTableauProjects": "Curated Tableau Visualizations",
+    "pythonProjects": "Python Projects",
+    "interviewPrep": "Interview Preparation",
+    "jobSearch": "Job Search Dashboard"
+  },
+  
+  "sectionDescriptions": {
+    "about": "Get to know my background and expertise",
+    "skills": "Technical and professional competencies",
+    "experience": "Career highlights and achievements",
+    "myTableauProjects": "Interactive data visualizations I created to showcase analytics and insights",
+    "curatedTableauProjects": "Outstanding Tableau visualizations I found inspiring and worth sharing",
+    "pythonProjects": "Python applications and scripts demonstrating programming skills",
+    "interviewPrep": "Questions, notes, and resources for interview success",
+    "jobSearch": "Quick access to job opportunities matching my expertise"
+  },
+
+  "about": {
+    "summary": "Experienced professional specializing in German localization, speech quality analysis, and text analytics. Combining linguistic expertise with data-driven insights to deliver exceptional localization and quality assurance solutions.",
+    "highlights": [
+      "Native-level German proficiency with deep cultural understanding",
+      "Expert in speech and text analytics methodologies",
+      "Proven track record in quality assurance and process optimization",
+      "Data visualization specialist using Tableau and analytics tools"
+    ]
+  },
+  
+  "skills": {
+    "Analytics": ["Speech Analytics", "Text Analytics", "Data Visualization", "Tableau", "Statistical Analysis", "KPI Development"],
+    "Localization": ["German Translation", "Cultural Adaptation", "Transcreation", "Terminology Management", "CAT Tools"],
+    "Quality Assurance": ["QA Processes", "Error Analysis", "Quality Metrics", "Documentation", "Process Improvement"],
+    "Technical": ["SQL", "Python", "Excel/VBA", "Data Analysis", "Reporting Tools"]
+  },
+  
+  "experience": [
+    {
+      "company": "Company Name",
+      "role": "Speech Quality Analyst",
+      "period": "2022 - Present",
+      "location": "Remote",
+      "description": "Lead speech analytics initiatives and quality assurance processes for German language content.",
+      "achievements": [
+        "Improved speech recognition accuracy by 25% through targeted quality analysis",
+        "Developed comprehensive QA frameworks for German localization projects",
+        "Created automated reporting dashboards using Tableau"
+      ]
+    },
+    {
+      "company": "Previous Company",
+      "role": "German Localization Specialist",
+      "period": "2019 - 2022",
+      "location": "Salt Lake City, UT",
+      "description": "Managed German localization projects and ensured linguistic quality across multiple platforms.",
+      "achievements": [
+        "Localized over 500,000 words of content with 99.5% quality score",
+        "Established terminology databases and style guides",
+        "Trained and mentored junior localization team members"
+      ]
+    }
+  ],
+  
+  "myTableauProjects": [
+    {
+      "title": "Speech Quality Metrics Dashboard",
+      "description": "Interactive dashboard showcasing speech recognition quality metrics and trends",
+      "embedUrl": "YOUR_TABLEAU_PUBLIC_EMBED_URL",
+      "thumbnail": ""
+    }
+  ],
+  
+  "curatedTableauProjects": [
+    {
+      "title": "Example: Great Visualization I Found",
+      "description": "An inspiring Tableau visualization that demonstrates excellent data storytelling",
+      "embedUrl": "YOUR_CURATED_TABLEAU_URL",
+      "thumbnail": "",
+      "author": "Original Author Name",
+      "sourceUrl": "https://public.tableau.com/app/profile/author"
+    }
+  ],
+  
+  "pythonProjects": [
+    {
+      "title": "Text Analytics Pipeline",
+      "description": "Automated text processing and sentiment analysis tool for German content",
+      "repoUrl": "https://github.com/GeMericanTranslytics/project-name",
+      "technologies": ["Python", "NLTK", "spaCy", "Pandas"],
+      "features": [
+        "Sentiment analysis for German text",
+        "Named entity recognition",
+        "Automated reporting"
+      ]
+    }
+  ],
+  
+  "interviewPrep": {
+    "behavioralQuestions": [
+      {
+        "question": "Tell me about a time you handled a challenging localization project.",
+        "starAnswer": {
+          "situation": "Describe the project context and challenges",
+          "task": "What was your specific responsibility",
+          "action": "Steps you took to address the challenge",
+          "result": "Measurable outcomes and learnings"
+        },
+        "notes": "Focus on German localization complexities"
+      }
+    ],
+    "technicalQuestions": [
+      {
+        "question": "How do you ensure quality in speech analytics?",
+        "keyPoints": [
+          "Quality metrics and KPIs",
+          "Error analysis methodology",
+          "Continuous improvement processes"
+        ],
+        "notes": ""
+      }
+    ],
+    "companyNotes": [
+      {
+        "company": "Example Company",
+        "researchNotes": "Key information about the company, their products, culture, recent news",
+        "interviewerNotes": "",
+        "questionsToAsk": [
+          "What does success look like in this role?",
+          "How does the localization team collaborate with other departments?"
+        ]
+      }
+    ],
+    "resources": [
+      {
+        "title": "STAR Method Guide",
+        "url": "https://example.com/star-method",
+        "category": "Behavioral",
+        "notes": "Review before behavioral interviews"
+      }
+    ]
+  },
+
+  "jobSearch": {
+    "keywords": [
+      "Speech Analytics",
+      "Text Analytics", 
+      "German Localization",
+      "German Translation",
+      "Quality Analyst",
+      "Localization QA"
+    ],
+    "locations": [
+      "Salt Lake City, UT",
+      "Remote"
+    ],
+    "companyCareerPages": [
+      {
+        "company": "eBay",
+        "url": "https://jobs.ebayinc.com/us/en/jobs-in-utah",
+        "logo": "",
+        "notes": "Check Utah-based positions"
+      }
+    ]
+  }
+}
