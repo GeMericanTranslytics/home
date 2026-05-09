@@ -68,7 +68,6 @@ const jobSites = [
   },
 ] 
 
-
 interface CompanyCareerPage {
   company: string
   url: string
