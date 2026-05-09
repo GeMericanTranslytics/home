@@ -34,7 +34,7 @@ export function Hero() {
           </h1>
 
           {/* Title */}
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-primary mb-6">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-6" style={{ color: 'magenta', fontFamily: '"Times New Roman", Times, serif' }}>
             {profileData.title}
           </h2>
 
