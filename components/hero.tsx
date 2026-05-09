@@ -6,7 +6,7 @@ import profileData from "@/data/profile.json"
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-16 bg-card/15 ring-offset-4 ring-offset-background shadow-2xl">
+    <section className="relative min-h-screen flex items-center justify-center pt-16 bg-card/80 ring-offset-4 ring-offset-background shadow-2xl">
       {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
       
