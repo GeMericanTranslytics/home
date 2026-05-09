@@ -20,7 +20,7 @@ import profileData from "@/data/profile.json"
 const jobSites = [
   {
     name: "LinkedIn",
-    icon: "🔗",
+    icon: "/images/LinkedIn_logo_initials.ico",
     color: "bg-blue-500/10 text-blue-400 border-blue-500/30 hover:bg-blue-500/20",
     buildUrl: (keyword: string, location: string) => {
       const params = new URLSearchParams({
@@ -33,7 +33,7 @@ const jobSites = [
   },
   {
     name: "Indeed",
-    icon: "📋",
+    icon: "/images/indeed.ico",
     color: "bg-purple-500/10 text-purple-400 border-purple-500/30 hover:bg-purple-500/20",
     buildUrl: (keyword: string, location: string) => {
       const params = new URLSearchParams({
@@ -46,7 +46,7 @@ const jobSites = [
   },
   {
     name: "Monster",
-    icon: "👹",
+    icon: "/images/monster.ico",
     color: "bg-green-500/10 text-green-400 border-green-500/30 hover:bg-green-500/20",
     buildUrl: (keyword: string, location: string) => {
       const encodedKeyword = encodeURIComponent(keyword)
@@ -56,7 +56,7 @@ const jobSites = [
   },
   {
     name: "ZipRecruiter",
-    icon: "⚡",
+    icon: "/images/zip.ico",
     color: "bg-orange-500/10 text-orange-400 border-orange-500/30 hover:bg-orange-500/20",
     buildUrl: (keyword: string, location: string) => {
       const params = new URLSearchParams({
@@ -184,7 +184,7 @@ export function JobSearch() {
   }
 
   return (
-    <div className="min-h-screen bg-background py-8">
+    <div className="min-h-screen bg-black/50 py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
