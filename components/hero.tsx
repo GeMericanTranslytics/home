@@ -6,7 +6,7 @@ import profileData from "@/data/profile.json"
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-16 bg-black/50">
+    <section className="relative min-h-screen flex items-center justify-center pt-16 bg-black/75">
       {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
       
@@ -34,12 +34,12 @@ export function Hero() {
           </h1>
 
           {/* Title */}
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-6" style={{ color: 'magenta', fontFamily: '"Times New Roman", Times, serif' }}>
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-6" style={{ color: 'Aqua', fontFamily: '"Times New Roman", Times, serif' }}>
             {profileData.title}
           </h2>
 
           {/* Tagline */}
-          <p className="text-lg sm:text-xl text-muted-foreground mb-6 max-w-2xl text-balance" style={{ color: 'magenta', fontFamily: '"Times New Roman", Times, serif', fontStyle: 'normal' }}>
+          <p className="text-lg sm:text-xl text-muted-foreground mb-6 max-w-2xl text-balance" style={{ color: 'Aqua', fontFamily: '"Times New Roman", Times, serif', fontStyle: 'normal' }}>
             {profileData.tagline}
           </p>
 
