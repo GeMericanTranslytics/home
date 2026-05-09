@@ -33,7 +33,7 @@ export function Navigation() {
       ? "backdrop-blur-md border-b border-border shadow-lg"
       : "bg-transparent"
   )}
-  style={isScrolled ? { background: 'linear-gradient(to right, rgba(0,0,0,0.85), rgba(204,0,0,0.85), rgba(255,206,0,0.85))' } : {}}
+  style={isScrolled ? { background: 'linear-gradient(to right, rgba(0,0,0,0.5), rgba(204,0,0,0.5), rgba(255,206,0,0.5))' } : {}}
 >
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
