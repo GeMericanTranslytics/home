@@ -10,7 +10,7 @@ const navItems = [
   { href: "#about", label: "About", icon: User },
   { href: "#experience", label: "Experience", icon: Briefcase },
   { href: "#projects", label: "Projects", icon: FolderOpen },
-  { href: "#jobs", label: "Job Search", icon: Search },
+  { href: "#jobs", label: "Job Search Dashboard", icon: Search },
 ]
 
 export function Navigation() {
@@ -52,7 +52,7 @@ export function Navigation() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-lg transition-all duration-200"
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg transition-all duration-200"
               >
                 <item.icon className="w-4 h-4" />
                 {item.label}
