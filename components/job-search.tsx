@@ -20,7 +20,7 @@ import profileData from "@/data/profile.json"
 const jobSites = [
   {
     name: "LinkedIn",
-    icon: "/images/LinkedIn_logo_initials.ico",
+    icon: "/images/LinkedIn_logo_initials.png",
     color: "bg-blue-500/10 text-blue-400 border-blue-500/30 hover:bg-blue-500/20",
     buildUrl: (keyword: string, location: string) => {
       const params = new URLSearchParams({
@@ -33,7 +33,7 @@ const jobSites = [
   },
   {
     name: "Indeed",
-    icon: "/images/indeed.ico",
+    icon: "/images/indeed.jpeg",
     color: "bg-purple-500/10 text-purple-400 border-purple-500/30 hover:bg-purple-500/20",
     buildUrl: (keyword: string, location: string) => {
       const params = new URLSearchParams({
@@ -46,7 +46,7 @@ const jobSites = [
   },
   {
     name: "Monster",
-    icon: "/images/monster.ico",
+    icon: "/images/monster.jpeg",
     color: "bg-green-500/10 text-green-400 border-green-500/30 hover:bg-green-500/20",
     buildUrl: (keyword: string, location: string) => {
       const encodedKeyword = encodeURIComponent(keyword)
@@ -56,7 +56,7 @@ const jobSites = [
   },
   {
     name: "ZipRecruiter",
-    icon: "/images/zip.ico",
+    icon: "/images/apple-touch-icon.png",
     color: "bg-orange-500/10 text-orange-400 border-orange-500/30 hover:bg-orange-500/20",
     buildUrl: (keyword: string, location: string) => {
       const params = new URLSearchParams({
