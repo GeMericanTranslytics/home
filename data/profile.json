@@ -1,10 +1,10 @@
 {
   "name": "Marcel Firmont",
   "title": "German Localization & Speech Quality Analyst",
-  "profileImage": "/images/profile.jpg",
+  "profileImage": "Marcel Firmont (Pro).jpeg",
   "tagline": "Speech Analytics | Text Analytics | German Localization | Quality Assurance",
-  "email": "your.email@example.com",
-  "location": "Salt Lake City, UT / Remote",
+  "email": "mhfirmont@outlook.com",
+  "location": "Salt Lake City, Utah",
   "github": "https://github.com/GeMericanTranslytics",
   "linkedin": "https://linkedin.com/in/yourprofile",
   
@@ -57,7 +57,7 @@
       "achievements": [
         "Improved speech recognition accuracy by 25% through targeted quality analysis",
         "Developed comprehensive QA frameworks for German localization projects",
-        "Created automated reporting dashboards using Tableau"
+        "Created automated reporting dashboards using Tableau."
       ]
     },
     {
@@ -114,11 +114,11 @@
         "question": "Tell me about a time you handled a challenging localization project.",
         "starAnswer": {
           "situation": "Describe the project context and challenges",
-          "task": "What was your specific responsibility",
+          "task": "What was your specific responsibility?",
           "action": "Steps you took to address the challenge",
           "result": "Measurable outcomes and learnings"
         },
-        "notes": "Focus on German localization complexities"
+        "notes": "Focus on German localization complexities."
       }
     ],
     "technicalQuestions": [
