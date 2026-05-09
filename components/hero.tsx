@@ -14,7 +14,7 @@ export function Hero() {
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
           {/* Profile Image */}
           <div className="relative mb-8">
-            <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden ring-4 ring-primary/90 ring-offset-4 ring-offset-background shadow-2xl">
+            <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden ring-4 ring-primary/10 ring-offset-4 ring-offset-background shadow-2xl">
               <Image
                 src={profileData.profileImage}
                 alt={profileData.name}
