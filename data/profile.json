@@ -74,25 +74,42 @@
     }
   ],
   
-  "myTableauProjects": [
-    {
-      "title": "Speech Quality Metrics Dashboard",
-      "description": "Interactive dashboard showcasing speech recognition quality metrics and trends",
-      "embedUrl": "YOUR_TABLEAU_PUBLIC_EMBED_URL",
-      "thumbnail": ""
-    }
-  ],
+"myTableauProjects": [],
   
-  "curatedTableauProjects": [
-    {
-      "title": "Example: Great Visualization I Found",
-      "description": "An inspiring Tableau visualization that demonstrates excellent data storytelling",
-      "embedUrl": "YOUR_CURATED_TABLEAU_URL",
-      "thumbnail": "",
-      "author": "Original Author Name",
-      "sourceUrl": "https://public.tableau.com/app/profile/author"
-    }
-  ],
+"curatedTableauProjects": [
+  {
+    "title": "Solar System Data for Kids",
+    "description": "An engaging visualization of solar system data",
+    "embedUrl": "https://public.tableau.com/app/profile/andy.zinovei/viz/SolarSystemData2Kids/SolarSystemData2Kids",
+    "thumbnail": "",
+    "author": "",
+    "sourceUrl": "https://public.tableau.com/app/profile/andy.zinovei/viz/SolarSystemData2Kids/SolarSystemData2Kids"
+  },
+  {
+    "title": "Gym Tracker",
+    "description": "Interactive fitness and gym tracking dashboard",
+    "embedUrl": "https://public.tableau.com/app/profile/roshaan.khan/viz/GymTracker/GymTracker",
+    "thumbnail": "",
+    "author": "",
+    "sourceUrl": "https://public.tableau.com/app/profile/roshaan.khan/viz/GymTracker/GymTracker"
+  },
+  {
+    "title": "Bundesliga Dashboard",
+    "description": "Bundesliga football statistics and insights",
+    "embedUrl": "https://public.tableau.com/app/profile/sany.tchanra/viz/Bundesliga_1/Dashboard1",
+    "thumbnail": "",
+    "author": "",
+    "sourceUrl": "https://public.tableau.com/app/profile/sany.tchanra/viz/Bundesliga_1/Dashboard1"
+  },
+  {
+    "title": "Premier League Dashboard",
+    "description": "Premier League football statistics and insights",
+    "embedUrl": "https://public.tableau.com/app/profile/shubham.waghmare/viz/premierleauge/Dashboard1",
+    "thumbnail": "",
+    "author": "",
+    "sourceUrl": "https://public.tableau.com/app/profile/shubham.waghmare/viz/premierleauge/Dashboard1"
+  }
+],
   
   "pythonProjects": [
     {
