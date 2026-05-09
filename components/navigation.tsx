@@ -33,7 +33,7 @@ export function Navigation() {
       ? "backdrop-blur-md border-b border-border shadow-lg"
       : "bg-transparent"
   )}
-  style={isScrolled ? { background: 'linear-gradient(to right, #000000, #CC0000, #FFCE00)' } : {}}
+  style={isScrolled ? { background: 'linear-gradient(to right, rgba(0,0,0,0.85), rgba(204,0,0,0.85), rgba(255,206,0,0.85))' } : {}}
 >
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -58,12 +58,13 @@ export function Navigation() {
                 {item.label}
               </Link>
             ))}
-            <Link href="/jobs">
-              <Button variant="default" size="sm" className="ml-2">
-                <Search className="w-4 h-4 mr-2" />
-                Search Jobs
-              </Button>
-            </Link>
+      <Link
+  href="/jobs"
+  className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-primary-foreground text-primary hover:bg-primary/10 rounded-lg transition-all duration-200"
+>
+  <Search className="w-4 h-4" />
+  Search Jobs
+</Link>
           </div>
 
           {/* Mobile Menu Button */}
