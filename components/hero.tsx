@@ -6,7 +6,7 @@ import profileData from "@/data/profile.json"
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-16 bg-card/90 ring-offset-4 ring-offset-background shadow-2xl">
+    <section className="relative min-h-screen flex items-center justify-center pt-16 bg-card/5 ring-offset-4 ring-offset-background shadow-2xl">
       {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
       
@@ -14,7 +14,7 @@ export function Hero() {
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
           {/* Profile Image */}
           <div className="relative mb-8">
-            <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden ring-4 ring-primary/10 ring-offset-4 ring-offset-background shadow-2xl">
+            <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden ring-4 ring-primary/85 ring-offset-4 ring-offset-background shadow-2xl">
               <Image
                 src={profileData.profileImage}
                 alt={profileData.name}
