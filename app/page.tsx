@@ -1,3 +1,7 @@
 export default function Home() {
-  return <h1>Your site is working</h1>;
+  return (
+    <main className="min-h-screen">
+      <h1>Testing components…</h1>
+    </main>
+  )
 }
