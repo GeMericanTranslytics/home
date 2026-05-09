@@ -66,7 +66,8 @@ const jobSites = [
       return `https://www.ziprecruiter.com/jobs-search?${params.toString()}`
     },
   },
-]
+] 
+
 
 interface CompanyCareerPage {
   company: string
