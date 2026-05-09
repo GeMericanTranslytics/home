@@ -6,12 +6,12 @@ import profileData from "@/data/profile.json"
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-16 bg-card/10 backdrop-blur-sm">
+    <section className="relative min-h-screen flex items-center justify-center pt-16 bg-black/50">
       {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="flex flex-col items-center text-center max-w-4xl mx-auto bg-card/25 backdrop-blur-sm border border-border/55 rounded-2xl px-10 py-10">
+        <div className="flex flex-col items-center text-center max-w-4xl mx-auto bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-10 py-10">
           {/* Profile Image */}
           <div className="relative mb-8">
             <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden ring-4 ring-primary/55 ring-offset-4 ring-offset-background shadow-2xl">
