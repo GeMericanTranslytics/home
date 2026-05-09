@@ -11,7 +11,7 @@ export function Hero() {
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="flex flex-col items-center text-center max-w-4xl mx-auto bg-card/85 ring-offset-4 ring-offset-background shadow-2xl border border-border/45 ring-offset-4 ring-offset-background shadow-2xl px-10 py-10">
+        <div className="flex flex-col items-center text-center max-w-4xl mx-auto bg-card/15 ring-offset-4 ring-offset-background shadow-2xl border border-border/45 ring-offset-4 ring-offset-background shadow-2xl px-10 py-10">
           {/* Profile Image */}
           <div className="relative mb-8">
             <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden ring-4 ring-primary/85 ring-offset-4 ring-offset-background shadow-2xl">
