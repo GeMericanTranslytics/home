@@ -39,7 +39,7 @@ export function Hero() {
           </h2>
 
           {/* Tagline */}
-          <p className="text-lg sm:text-xl text-muted-foreground mb-6 max-w-2xl text-balance" style={{ color: 'magenta', fontFamily: '"Times New Roman", Times, serif' }}>
+          <p className="text-lg sm:text-xl text-muted-foreground mb-6 max-w-2xl text-balance" style={{ color: 'magenta', fontFamily: '"Times New Roman", Times, serif', fontStyle: 'normal' }}>
             {profileData.tagline}
           </p>
 
