@@ -252,7 +252,7 @@ export function Projects() {
                 )}
               </div>
             </div>
-               )}
+          )}
 
           {/* Python Projects Section */}
           {hasPythonProjects && (
