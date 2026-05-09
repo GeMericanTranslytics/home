@@ -34,12 +34,12 @@ export function Hero() {
           </h1>
 
           {/* Title */}
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-6" style={{ color: 'Aqua', fontFamily: '"Times New Roman", Times, serif' }}>
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-6" style={{ color: 'Cyan', fontFamily: '"Times New Roman", Times, serif' }}>
             {profileData.title}
           </h2>
 
           {/* Tagline */}
-          <p className="text-lg sm:text-xl text-muted-foreground mb-6 max-w-2xl text-balance" style={{ color: 'Aqua', fontFamily: '"Times New Roman", Times, serif', fontStyle: 'normal' }}>
+          <p className="text-lg sm:text-xl text-muted-foreground mb-6 max-w-2xl text-balance" style={{ color: 'Cyan', fontFamily: '"Times New Roman", Times, serif', fontStyle: 'normal' }}>
             {profileData.tagline}
           </p>
 
