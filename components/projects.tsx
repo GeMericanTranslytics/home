@@ -31,7 +31,8 @@ function TableauEmbed({ url }: { url: string }) {
     : `${url}?:embed=y&:showVizHome=no&:toolbar=yes`
 
   return (
-    <div style={{ position: "relative", width: "100%", paddingBottom: "50%", height: 0, overflow: "hidden" }}>
+    /* Fix: Set a minimum height and remove the padding-bottom hack so the dashboard has room to display entirely */
+    <div className="w-full min-h-[650px] md:min-h-[800px] lg:min-h-[850px] relative overflow-x-auto overflow-y-hidden">
       <iframe
         src={vizUrl}
         style={{
@@ -80,7 +81,7 @@ export function Projects() {
             )}
 
             {valid ? (
-              <div className="w-full flex justify-center items-center">
+              <div className="w-full">
                 <TableauEmbed url={project.embedUrl} />
               </div>
             ) : (
