@@ -34,7 +34,16 @@ function TableauEmbed({ url }: { url: string }) {
     : url
 
   return (
-    <div ref={ref} style={{ width: "100%", height: "850px" }}>
+    <div
+      ref={ref}
+      style={{
+        width: "100%",
+        height: "850px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <tableau-viz
         src={vizUrl}
         width="100%"
@@ -74,55 +83,57 @@ export function Projects() {
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
-      <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 overflow-hidden w-full">
-        <CardContent className="p-0">
-          {/* Viz area - full width, tall enough to show everything */}
-          <div className="relative w-full" style={{ height: "850px" }}>
-            {isCurated && (
-              <Badge className="absolute top-3 right-3 z-10 bg-accent text-accent-foreground">
-                <Star className="w-3 h-3 mr-1" />
-                Curated
-              </Badge>
-            )}
-            {valid ? (
-              <TableauEmbed url={project.embedUrl} />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center bg-secondary/30">
-                <p className="text-xs text-muted-foreground">Add Tableau URL in profile.json</p>
-              </div>
-            )}
-          </div>
+      <div className="w-[70%] mx-auto">
+        <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 overflow-hidden w-full">
+          <CardContent className="p-0">
+            {/* Viz area */}
+            <div className="relative w-full flex items-center justify-center" style={{ height: "850px" }}>
+              {isCurated && (
+                <Badge className="absolute top-3 right-3 z-10 bg-accent text-accent-foreground">
+                  <Star className="w-3 h-3 mr-1" />
+                  Curated
+                </Badge>
+              )}
+              {valid ? (
+                <TableauEmbed url={project.embedUrl} />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center bg-secondary/30">
+                  <p className="text-xs text-muted-foreground">Add Tableau URL in profile.json</p>
+                </div>
+              )}
+            </div>
 
-          {/* Footer */}
-          <div className="p-6">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              {project.title}
-            </h3>
-            <p className="text-muted-foreground text-sm mb-3">
-              {project.description}
-            </p>
+            {/* Footer */}
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-2">
+                {project.title}
+              </h3>
+              <p className="text-muted-foreground text-sm mb-3">
+                {project.description}
+              </p>
 
-            {isCurated && project.author && (
-              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
-                <User className="w-3 h-3" />
-                <span>By {project.author}</span>
-              </div>
-            )}
+              {isCurated && project.author && (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
+                  <User className="w-3 h-3" />
+                  <span>By {project.author}</span>
+                </div>
+              )}
 
-            {valid && project.sourceUrl && (
-              <Link href={project.sourceUrl} target="_blank" rel="noopener noreferrer">
-                <Button
-                  variant="outline"
-                  className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  Open in Tableau
-                </Button>
-              </Link>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+              {valid && project.sourceUrl && (
+                <Link href={project.sourceUrl} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    variant="outline"
+                    className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    Open in Tableau
+                  </Button>
+                </Link>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     )
   }
 
@@ -190,8 +201,7 @@ export function Projects() {
 
   return (
     <section id="projects" className="py-24">
-      {/* Full width container - 90% of screen */}
-      <div className="w-[90%] mx-auto px-4">
+      <div className="w-full mx-auto px-4">
 
         {/* My Tableau Projects */}
         {hasMyProjects && (
@@ -245,7 +255,7 @@ export function Projects() {
               </p>
               <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {pythonProjects.map((project, index) => (
                 <PythonCard key={index} project={project} />
               ))}
