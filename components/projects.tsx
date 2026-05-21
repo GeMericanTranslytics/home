@@ -30,6 +30,10 @@ function TableauEmbed({ url }: { url: string }) {
     ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no&:device=desktop&:apiID=host0`
     : `${url}?:embed=y&:showVizHome=no&:toolbar=yes`
 
+  // Assume Tableau dashboard is 1400x900. Adjust if yours is different.
+  const DASHBOARD_WIDTH = 1400
+  const DASHBOARD_HEIGHT = 900
+
   return (
     <div
       style={{
@@ -37,16 +41,16 @@ function TableauEmbed({ url }: { url: string }) {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "rgba(15,15,20,0.85)", // darker box
+        background: "rgba(15,15,20,0.9)", // darker box
         padding: "24px",
       }}
     >
       <iframe
         src={vizUrl}
         style={{
-          width: "100%",
-          maxWidth: "1200px",
-          height: "900px", // make sure this matches or exceeds your Tableau dashboard height
+          width: `${DASHBOARD_WIDTH}px`,
+          height: `${DASHBOARD_HEIGHT}px`,
+          maxWidth: "100%",
           border: "none",
         }}
         allowFullScreen
@@ -74,8 +78,8 @@ export function Projects() {
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
-      <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
-        <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full overflow-hidden">
+      <div style={{ width: "100%", maxWidth: "1400px", margin: "0 auto" }}>
+        <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full overflow-visible">
           <CardContent className="p-0">
             {isCurated && (
               <div className="flex justify-end p-3">
