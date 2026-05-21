@@ -31,17 +31,10 @@ function TableauEmbed({ url }: { url: string }) {
     : `${url}?:embed=y&:showVizHome=no&:toolbar=yes`
 
   return (
-    <div style={{ position: "relative", width: "100%", paddingBottom: "75%", height: 0, overflow: "hidden" }}>
+    <div className="w-full flex justify-center overflow-hidden">
       <iframe
         src={vizUrl}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          border: "none",
-        }}
+        className="w-full h-[850px] border-none"
         allowFullScreen
         title="Tableau Visualization"
       />
@@ -67,9 +60,8 @@ export function Projects() {
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
-      // FIXED: Added 'flex justify-center' to ensure the entire card is centered horizontally
       <div className="flex justify-center w-full">
-        <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full max-w-5xl overflow-hidden">
+        <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full max-w-6xl overflow-hidden">
           <CardContent className="p-0">
             {isCurated && (
               <div className="flex justify-end p-3">
