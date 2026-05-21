@@ -27,12 +27,14 @@ interface PythonProject {
 function TableauEmbed({ url }: { url: string }) {
   const match = url.match(/\/viz\/([^/]+)\/([^/?]+)/)
   
+  /* FIX: Standardized using URL encoded format (%3A for ':', %3D for '=') to ensure the browser cleanly routes parameters to the Tableau rendering engine */
   const vizUrl = match
-    ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no&:size=100%25,100%25&:apiID=host0`
-    : `${url}?:embed=y&:showVizHome=no&:toolbar=yes&:size=100%25,100%25`
+    ? `https://public.tableau.com/views/${match[1]}/${match[2]}?%3Aembed=y&%3AshowVizHome=no&%3Atoolbar=yes&%3Atabs=no&%3Asize=100%25,100%25&%3AapiID=host0`
+    : `${url}?%3Aembed=y&%3AshowVizHome=no&%3Atoolbar=yes&%3Asize=100%25,100%25`
 
   return (
-    <div className="w-full h-[500px] sm:h-[600px] md:h-[750px] lg:h-[800px] xl:h-[850px] relative overflow-hidden bg-background/5">
+    /* FIX: Added flex, justify-center, and items-center here to override Tableau's top-left anchoring default and force the canvas to center symmetrically */
+    <div className="w-full h-[500px] sm:h-[600px] md:h-[750px] lg:h-[800px] xl:h-[850px] relative overflow-hidden bg-background/5 flex justify-center items-center">
       <iframe
         src={vizUrl}
         style={{
@@ -42,6 +44,7 @@ function TableauEmbed({ url }: { url: string }) {
           width: "100%",
           height: "100%",
           border: "none",
+          margin: "0 auto" /* Double layer centering safeguard */
         }}
         allowFullScreen
         title="Tableau Visualization"
@@ -68,10 +71,8 @@ export function Projects() {
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
-      /* Keeps the container strictly bound to 70% of the window width, centered cleanly on your background */
       <div className="w-[70vw] max-w-full mx-auto flex flex-col items-center justify-center px-4">
         <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full overflow-hidden mx-auto">
-          {/* FIX: Added items-center and text-center to guarantee internal container mechanics lock into the exact horizontal midpoint */}
           <CardContent className="p-0 w-full flex flex-col justify-center items-center text-center">
             {isCurated && (
               <div className="flex justify-end w-full p-3">
@@ -83,8 +84,7 @@ export function Projects() {
             )}
 
             {valid ? (
-              /* FIX: Added w-full to make sure the inner iframe container expands fully to occupy the exact 70% space symmetrically */
-              <div className="w-full relative mx-auto">
+              <div className="w-full relative mx-auto flex justify-center items-center">
                 <TableauEmbed url={project.embedUrl} />
               </div>
             ) : (
@@ -93,7 +93,6 @@ export function Projects() {
               </div>
             )}
 
-            {/* FIX: Ensured text alignment properties match the centralized aesthetic layout */}
             <div className="p-6 border-t border-border/30 w-full bg-card text-left">
               <h3 className="text-lg font-semibold text-foreground mb-2">
                 {project.title}
