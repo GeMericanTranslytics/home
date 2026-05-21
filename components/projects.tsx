@@ -25,11 +25,9 @@ interface PythonProject {
 }
 
 function TableauEmbed({ url }: { url: string }) {
-  // Logic to handle both standard and custom Tableau URLs
-  const match = url.match(/\/viz\/([^/]+)\/([^/?]+)/)
-  const vizUrl = match
-    ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no&:display_count=n&:apiID=host0&:fit=yes`
-    : `${url}?:embed=y&:showVizHome=no&:toolbar=yes&:display_count=n&:fit=yes`
+  // Extract base URL to avoid double question marks
+  const baseUrl = url.split('?')[0]
+  const vizUrl = `${baseUrl}?:embed=y&:showVizHome=no&:toolbar=yes&:fit=yes&:display_count=n`
 
   return (
     <div className="w-full h-full relative overflow-hidden">
@@ -76,7 +74,7 @@ export function Projects() {
               </div>
             )}
             {valid ? (
-              <div className="w-full h-[700px] bg-transparent">
+              <div className="w-full h-[700px] relative">
                 <TableauEmbed url={project.embedUrl} />
               </div>
             ) : (
@@ -126,15 +124,6 @@ export function Projects() {
     </Card>
   )
 
-  const EmptyAddCard = ({ type }: { type: string }) => (
-    <Card className="bg-card/30 border-border/30 border-dashed h-full flex items-center justify-center">
-      <CardContent className="p-8 text-center">
-        <Plus className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
-        <p className="text-sm text-muted-foreground">Add your first {type}</p>
-      </CardContent>
-    </Card>
-  )
-
   return (
     <section id="projects" className="py-24 w-full">
       <div className="container mx-auto px-4">
@@ -157,12 +146,6 @@ export function Projects() {
               {pythonProjects.map((p, i) => <PythonCard key={i} project={p} />)}
             </div>
           </div>
-        )}
-        {!hasAnyProjects && (
-           <div className="text-center py-20">
-             <h2 className="text-2xl font-bold text-muted-foreground">No projects added yet.</h2>
-             <p className="mt-2 text-muted-foreground">Edit <code className="bg-secondary px-1 rounded">data/profile.json</code> to get started.</p>
-           </div>
         )}
       </div>
     </section>
