@@ -32,14 +32,14 @@ function TableauEmbed({ url }: { url: string }) {
     : url
 
   return (
-    <div style={{ width: "100%", height: "900px", overflow: "hidden" }}>
+    <div style={{ width: "100%", height: "900px", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <tableau-viz
         src={vizUrl}
         width="100%"
         height="900"
         hide-tabs
         toolbar="bottom"
-        style={{ width: "100%", height: "100%" }}
+        style={{ display: "block", margin: "0 auto" }}
       />
     </div>
   )
