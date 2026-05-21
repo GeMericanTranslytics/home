@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import { useState, useLayoutEffect, useRef } from "react"
 import Link from "next/link"
 import {
   ExternalLink,
@@ -36,16 +36,15 @@ interface PythonProject {
 /**
  * TableauEmbed
  *
- * Renders a Tableau iframe and **scales it** so the entire dashboard content
- * is visible and centered inside the card. This uses a measured container size
- * and scales the iframe proportionally (CSS transform) so nothing is cropped.
- *
- * If your dashboard natural size differs, pass naturalWidth/naturalHeight props.
+ * This version FIXES the width‑cutoff problem by:
+ * - Rendering the iframe at its natural size (e.g., 1800px wide)
+ * - Scaling it DOWN to fit the container width
+ * - Automatically adjusting height so nothing is clipped
  */
 function TableauEmbed({
   url,
-  naturalWidth = 1400,
-  naturalHeight = 1100,
+  naturalWidth = 1800,   // Tableau dashboards are often ~1800px wide
+  naturalHeight = 1100,  // Adjust if needed
 }: {
   url: string
   naturalWidth?: number
@@ -57,88 +56,63 @@ function TableauEmbed({
     : `${url}?:embed=y&:showVizHome=no&:toolbar=yes`
 
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const iframeRef = useRef<HTMLIFrameElement | null>(null)
   const [scale, setScale] = useState(1)
 
-  // Recalculate scale to fit the container while preserving aspect ratio
   useLayoutEffect(() => {
     if (!containerRef.current) return
 
-    const compute = () => {
-      const container = containerRef.current!
-      const cw = container.clientWidth
-      const ch = container.clientHeight
-
-      // If container has zero height (rare), use viewport height fallback
-      const containerHeight = ch || Math.max(window.innerHeight - 200, 600)
-
-      const scaleX = cw / naturalWidth
-      const scaleY = containerHeight / naturalHeight
-      const newScale = Math.min(scaleX, scaleY, 1) // don't upscale beyond 1
-
+    const computeScale = () => {
+      const containerWidth = containerRef.current!.clientWidth
+      const newScale = Math.min(containerWidth / naturalWidth, 1)
       setScale(newScale)
     }
 
-    compute()
+    computeScale()
 
-    // Resize observer for container and window resize fallback
-    const ro = new ResizeObserver(() => compute())
+    const ro = new ResizeObserver(() => computeScale())
     ro.observe(containerRef.current)
 
-    const onResize = () => compute()
-    window.addEventListener("resize", onResize)
-
+    window.addEventListener("resize", computeScale)
     return () => {
       ro.disconnect()
-      window.removeEventListener("resize", onResize)
+      window.removeEventListener("resize", computeScale)
     }
-  }, [naturalWidth, naturalHeight])
+  }, [naturalWidth])
 
-  // Wrapper styles:
-  // - outer wrapper centers content and provides dark background
-  // - inner viewport has fixed height equal to naturalHeight * scale so the page layout reserves space
-  // - iframe is rendered at its natural size and scaled via transform so the entire viz is visible
   return (
     <div
       style={{
         width: "100%",
+        background: "rgba(15,15,20,0.9)",
+        padding: "24px",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
-        background: "rgba(15,15,20,0.9)",
-        padding: "20px",
       }}
     >
       <div
         ref={containerRef}
         style={{
           width: "100%",
-          maxWidth: `${naturalWidth}px`,
-          // Reserve vertical space so the scaled iframe doesn't overflow the card.
-          // This height will be naturalHeight * scale (updated via state).
-          height: `${Math.ceil(naturalHeight * scale)}px`,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          overflow: "hidden",
+          maxWidth: "100%",
+          height: naturalHeight * scale,
+          overflow: "visible",
           position: "relative",
         }}
       >
         <iframe
-          ref={iframeRef}
           src={vizUrl}
-          title="Tableau Visualization"
           style={{
-            width: `${naturalWidth}px`,
-            height: `${naturalHeight}px`,
+            width: naturalWidth,
+            height: naturalHeight,
             border: "none",
             transform: `scale(${scale})`,
             transformOrigin: "top left",
-            // Prevent pointer events issues when scaled
-            willChange: "transform",
-            display: "block",
+            position: "absolute",
+            top: 0,
+            left: 0,
           }}
           allowFullScreen
+          title="Tableau Visualization"
         />
       </div>
     </div>
@@ -146,11 +120,9 @@ function TableauEmbed({
 }
 
 export function Projects() {
-  // Merge profileData.myTableauProjects with the two requested vizzes
   const myProjects: TableauProject[] = [
     ...(profileData.myTableauProjects || []),
 
-    // Added vizzes
     {
       title: "Citizen Service Requests",
       description: "A Tableau dashboard analyzing citizen service request patterns.",
@@ -247,7 +219,6 @@ export function Projects() {
   return (
     <section id="projects" className="py-24">
       <div className="w-full mx-auto px-4">
-        {/* MY PROJECTS CAROUSEL */}
         {hasMyProjects && (
           <div className="mb-20">
             <div className="text-center mb-10">
@@ -262,7 +233,6 @@ export function Projects() {
             </div>
 
             <div className="relative w-full max-w-[1400px] mx-auto">
-              {/* LEFT ARROW */}
               <button
                 onClick={prev}
                 aria-label="Previous visualization"
@@ -271,17 +241,9 @@ export function Projects() {
                 <ChevronLeft className="w-6 h-6" />
               </button>
 
-              {/* CURRENT VIZ CARD */}
               <Card className="bg-card/50 border-border/50 backdrop-blur-sm w-full overflow-visible">
                 <CardContent className="p-0">
-                  {/* Use TableauEmbed with natural size that matches typical Tableau dashboards.
-                      If a specific dashboard is known to be taller/wider, you can pass props
-                      naturalWidth/naturalHeight to TableauEmbed when rendering. */}
-                  <TableauEmbed
-                    url={currentProject.embedUrl}
-                    // If you know a specific dashboard natural size, pass it here:
-                    // naturalWidth={1400} naturalHeight={1200}
-                  />
+                  <TableauEmbed url={currentProject.embedUrl} />
 
                   <div className="p-6 border-t border-border/30">
                     <h3 className="text-lg font-semibold text-foreground mb-2">
@@ -306,7 +268,6 @@ export function Projects() {
                 </CardContent>
               </Card>
 
-              {/* RIGHT ARROW */}
               <button
                 onClick={next}
                 aria-label="Next visualization"
@@ -318,7 +279,6 @@ export function Projects() {
           </div>
         )}
 
-        {/* CURATED PROJECTS */}
         {hasCuratedProjects && (
           <div className="mb-20">
             <div className="text-center mb-10">
@@ -382,7 +342,6 @@ export function Projects() {
           </div>
         )}
 
-        {/* PYTHON PROJECTS */}
         {hasPythonProjects && (
           <div className="mb-8">
             <div className="text-center mb-10">
@@ -390,7 +349,8 @@ export function Projects() {
                 {profileData.sectionTitles?.pythonProjects || "Python Projects"}
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
-                {profileData.sectionDescriptions?.pythonProjects || "Python applications and scripts"}
+                {profileData.sectionDescriptions?.pythonProjects ||
+                  "Python applications and scripts"}
               </p>
               <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
@@ -403,7 +363,6 @@ export function Projects() {
           </div>
         )}
 
-        {/* EMPTY STATE */}
         {!hasAnyProjects && (
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Projects</h2>
