@@ -26,13 +26,15 @@ interface PythonProject {
 
 function TableauEmbed({ url }: { url: string }) {
   const match = url.match(/\/viz\/([^/]+)\/([^/?]+)/)
+  
+  /* FIX: Added &:size=100%,100% and removed rigid device overrides. This forces the internal Tableau canvas layout to auto-fit whatever pixel boundaries the website container gives it. */
   const vizUrl = match
-    ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no&:device=desktop&:apiID=host0`
-    : `${url}?:embed=y&:showVizHome=no&:toolbar=yes`
+    ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no&:size=100%,100%&:apiID=host0`
+    : `${url}?:embed=y&:showVizHome=no&:toolbar=yes&:size=100%,100%`
 
   return (
-    /* Fix: Increased minimum height to 900px to fully show the bottom row, and forced full-width expansion */
-    <div className="w-full min-h-[700px] md:min-h-[850px] lg:min-h-[900px] relative">
+    /* FIX: Used explicit, responsive height utilities instead of padding percentages. This ensures the dashboard fits cleanly within a beautifully proportioned container across all viewports. */
+    <div className="w-full h-[600px] sm:h-[700px] md:h-[800px] lg:h-[850px] relative overflow-hidden bg-background/5">
       <iframe
         src={vizUrl}
         style={{
@@ -68,11 +70,9 @@ export function Projects() {
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
-      /* Fix: Changed from max-w-6xl to max-w-7xl to stop Tableau from horizontally cropping the desktop render */
-      <div className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center px-4">
+      <div className="w-full max-w-6xl mx-auto flex flex-col items-center justify-center px-4">
         <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full overflow-hidden mx-auto">
-          {/* Fix: Added overflow-x-auto here to safeguard smaller tablet displays without truncating components */}
-          <CardContent className="p-0 w-full flex flex-col justify-center overflow-x-auto scrollbar-thin">
+          <CardContent className="p-0 w-full flex flex-col justify-center">
             {isCurated && (
               <div className="flex justify-end p-3">
                 <Badge className="bg-accent text-accent-foreground">
@@ -83,7 +83,7 @@ export function Projects() {
             )}
 
             {valid ? (
-              <div className="w-full min-w-[1000px] lg:min-w-full">
+              <div className="w-full relative">
                 <TableauEmbed url={project.embedUrl} />
               </div>
             ) : (
