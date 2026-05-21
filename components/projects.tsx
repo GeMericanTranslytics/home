@@ -30,6 +30,9 @@ function TableauEmbed({ url }: { url: string }) {
     ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no`
     : `${url}?:embed=y&:showVizHome=no&:toolbar=yes`
 
+  const VIZ_WIDTH = 1400
+  const VIZ_HEIGHT = 1100 // bump this up if your dashboard is taller
+
   return (
     <div
       style={{
@@ -41,28 +44,17 @@ function TableauEmbed({ url }: { url: string }) {
         alignItems: "center",
       }}
     >
-      <div
+      <iframe
+        src={vizUrl}
         style={{
           width: "100%",
-          maxWidth: "1400px",
-          aspectRatio: "16 / 10", // auto-expands while keeping shape
-          position: "relative",
+          maxWidth: `${VIZ_WIDTH}px`,
+          height: `${VIZ_HEIGHT}px`,
+          border: "none",
         }}
-      >
-        <iframe
-          src={vizUrl}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            border: "none",
-          }}
-          allowFullScreen
-          title="Tableau Visualization"
-        />
-      </div>
+        allowFullScreen
+        title="Tableau Visualization"
+      />
     </div>
   )
 }
@@ -75,14 +67,14 @@ export function Projects() {
       title: "Citizen Service Requests",
       description: "A Tableau dashboard analyzing citizen service request patterns.",
       embedUrl: "https://public.tableau.com/views/citizeenservicerequests/main",
-      sourceUrl: "https://public.tableau.com/app/profile/nur.adhyaksa.hamid/viz/citizeenservicerequests/main"
+      sourceUrl: "https://public.tableau.com/app/profile/nur.adhyaksa.hamid/viz/citizeenservicerequests/main",
     },
     {
       title: "Exploratory Dashboard",
       description: "A Tableau exploratory dashboard by Ed Myers.",
       embedUrl: "https://public.tableau.com/views/ExploratoryDashboard_16183795969740/Dashboard2",
-      sourceUrl: "https://public.tableau.com/app/profile/ed.myers/viz/ExploratoryDashboard_16183795969740/Dashboard2"
-    }
+      sourceUrl: "https://public.tableau.com/app/profile/ed.myers/viz/ExploratoryDashboard_16183795969740/Dashboard2",
+    },
   ]
 
   const curatedProjects: TableauProject[] = profileData.curatedTableauProjects || []
@@ -164,8 +156,6 @@ export function Projects() {
   return (
     <section id="projects" className="py-24">
       <div className="w-full mx-auto px-4">
-
-        {/* CAROUSEL */}
         {hasMyProjects && (
           <div className="mb-20">
             <div className="text-center mb-10">
@@ -179,8 +169,6 @@ export function Projects() {
             </div>
 
             <div className="relative w-full max-w-[1400px] mx-auto">
-
-              {/* LEFT ARROW */}
               <button
                 onClick={prev}
                 className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-3 rounded-full z-10"
@@ -188,7 +176,6 @@ export function Projects() {
                 <ChevronLeft className="w-6 h-6" />
               </button>
 
-              {/* CURRENT VIZ */}
               <Card className="bg-card/50 border-border/50 backdrop-blur-sm w-full overflow-visible">
                 <CardContent className="p-0">
                   <TableauEmbed url={currentProject.embedUrl} />
@@ -216,7 +203,6 @@ export function Projects() {
                 </CardContent>
               </Card>
 
-              {/* RIGHT ARROW */}
               <button
                 onClick={next}
                 className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-3 rounded-full z-10"
@@ -227,7 +213,6 @@ export function Projects() {
           </div>
         )}
 
-        {/* CURATED PROJECTS */}
         {hasCuratedProjects && (
           <div className="mb-20">
             <div className="text-center mb-10">
@@ -242,7 +227,10 @@ export function Projects() {
 
             <div className="flex flex-col gap-8">
               {curatedProjects.map((project, index) => (
-                <Card key={index} className="bg-card/50 border-border/50 backdrop-blur-sm w-full overflow-visible max-w-[1400px] mx-auto">
+                <Card
+                  key={index}
+                  className="bg-card/50 border-border/50 backdrop-blur-sm w-full overflow-visible max-w-[1400px] mx-auto"
+                >
                   <CardContent className="p-0">
                     <div className="flex justify-end p-3">
                       <Badge className="bg-accent text-accent-foreground">
@@ -287,14 +275,13 @@ export function Projects() {
           </div>
         )}
 
-        {/* PYTHON PROJECTS */}
         {hasPythonProjects && (
           <div className="mb-8">
             <div className="text-center mb-10">
               <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
                 {profileData.sectionTitles?.pythonProjects || "Python Projects"}
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
+            <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
                 {profileData.sectionDescriptions?.pythonProjects || "Python applications and scripts"}
               </p>
               <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
