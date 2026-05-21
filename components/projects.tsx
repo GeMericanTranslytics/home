@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import Link from "next/link"
 import { ExternalLink, Code2, Github, Star, User, Plus } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
@@ -26,30 +26,20 @@ interface PythonProject {
 }
 
 function TableauEmbed({ url }: { url: string }) {
-  const ref = useRef<HTMLDivElement>(null)
-
   const match = url.match(/\/viz\/([^/]+)\/([^/?]+)/)
   const vizUrl = match
     ? `https://public.tableau.com/views/${match[1]}/${match[2]}`
     : url
 
   return (
-    <div
-      ref={ref}
-      style={{
-        width: "100%",
-        height: "850px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <div style={{ width: "100%", height: "900px", overflow: "hidden" }}>
       <tableau-viz
         src={vizUrl}
         width="100%"
-        height="850"
+        height="900"
         hide-tabs
         toolbar="bottom"
+        style={{ width: "100%", height: "100%" }}
       />
     </div>
   )
@@ -83,28 +73,32 @@ export function Projects() {
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
-      <div className="w-[70%] mx-auto">
-        <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 overflow-hidden w-full">
+      <div style={{ width: "70%", margin: "0 auto" }}>
+        <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 overflow-visible w-full">
           <CardContent className="p-0">
-            {/* Viz area */}
-            <div className="relative w-full flex items-center justify-center" style={{ height: "850px" }}>
-              {isCurated && (
-                <Badge className="absolute top-3 right-3 z-10 bg-accent text-accent-foreground">
+            {/* Badge */}
+            {isCurated && (
+              <div className="flex justify-end p-3">
+                <Badge className="bg-accent text-accent-foreground">
                   <Star className="w-3 h-3 mr-1" />
                   Curated
                 </Badge>
-              )}
+              </div>
+            )}
+
+            {/* Viz - full width, no clipping */}
+            <div style={{ width: "100%", minHeight: "900px" }}>
               {valid ? (
                 <TableauEmbed url={project.embedUrl} />
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center bg-secondary/30">
+                <div className="flex items-center justify-center bg-secondary/30" style={{ height: "900px" }}>
                   <p className="text-xs text-muted-foreground">Add Tableau URL in profile.json</p>
                 </div>
               )}
             </div>
 
             {/* Footer */}
-            <div className="p-6">
+            <div className="p-6 border-t border-border/30">
               <h3 className="text-lg font-semibold text-foreground mb-2">
                 {project.title}
               </h3>
