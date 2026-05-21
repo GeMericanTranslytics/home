@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useRef } from "react"
 import Link from "next/link"
 import { ExternalLink, Code2, Github, Star, User, Plus } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
@@ -68,8 +67,9 @@ export function Projects() {
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
-      <div style={{ width: "100%" }}>
-        <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full overflow-hidden">
+      // FIXED: Added 'flex justify-center' to ensure the entire card is centered horizontally
+      <div className="flex justify-center w-full">
+        <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full max-w-5xl overflow-hidden">
           <CardContent className="p-0">
             {isCurated && (
               <div className="flex justify-end p-3">
