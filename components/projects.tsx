@@ -1,15 +1,3 @@
-Ah, I see exactly what is happening now. Look at the right-hand side of your screenshot: the dashboard metrics ("Sales by Ship Mode") are abruptly clipped, and a tiny piece of a scrollbar is visible at the very bottom right.
-
-This means the iframe box is large enough on your website now, but **Tableau is internally cutting off its own content** because the dashboard's internal fixed pixel layout width (set inside Tableau Desktop when it was built) is wider than the `max-w-6xl` (`1152px`) container limit we applied in Tailwind.
-
-To fix this once and for all, we need to do two things:
-
-1. Increase the container cap to `max-w-7xl` (`1280px`) or full width so the layout has room to stretch natively without squeezing into a horizontal mobile breakpoint.
-2. Add explicit horizontal overflow helpers (`overflow-x-auto`) to the outer card. That way, if a user views it on a slightly smaller screen, the dashboard will scroll smoothly side-to-side rather than cutting off into oblivion.
-
-Here is your updated full code:
-
-```tsx
 "use client"
 
 import Link from "next/link"
@@ -284,5 +272,3 @@ export function Projects() {
     </section>
   )
 }
-
-```
