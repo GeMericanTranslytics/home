@@ -27,13 +27,11 @@ interface PythonProject {
 function TableauEmbed({ url }: { url: string }) {
   const match = url.match(/\/viz\/([^/]+)\/([^/?]+)/)
   
-  /* FIX: Safely split the size parameters into URL-compliant format to eliminate the "URI malformed" crash while maintaining autofit functionality */
   const vizUrl = match
     ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no&:size=100%25,100%25&:apiID=host0`
     : `${url}?:embed=y&:showVizHome=no&:toolbar=yes&:size=100%25,100%25`
 
   return (
-    /* Standardized dynamic height matrix to hold the auto-fitted canvas firmly across device breakpoints */
     <div className="w-full h-[500px] sm:h-[600px] md:h-[750px] lg:h-[800px] xl:h-[850px] relative overflow-hidden bg-background/5">
       <iframe
         src={vizUrl}
@@ -70,12 +68,13 @@ export function Projects() {
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
-      /* Keeps the container restricted precisely to 70% of the available window layout width */
+      /* Keeps the container strictly bound to 70% of the window width, centered cleanly on your background */
       <div className="w-[70vw] max-w-full mx-auto flex flex-col items-center justify-center px-4">
         <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full overflow-hidden mx-auto">
-          <CardContent className="p-0 w-full flex flex-col justify-center">
+          {/* FIX: Added items-center and text-center to guarantee internal container mechanics lock into the exact horizontal midpoint */}
+          <CardContent className="p-0 w-full flex flex-col justify-center items-center text-center">
             {isCurated && (
-              <div className="flex justify-end p-3">
+              <div className="flex justify-end w-full p-3">
                 <Badge className="bg-accent text-accent-foreground">
                   <Star className="w-3 h-3 mr-1" />
                   Curated
@@ -84,16 +83,18 @@ export function Projects() {
             )}
 
             {valid ? (
-              <div className="w-full relative">
+              /* FIX: Added w-full to make sure the inner iframe container expands fully to occupy the exact 70% space symmetrically */
+              <div className="w-full relative mx-auto">
                 <TableauEmbed url={project.embedUrl} />
               </div>
             ) : (
-              <div className="flex items-center justify-center bg-secondary/30" style={{ height: "600px" }}>
+              <div className="flex items-center justify-center bg-secondary/30 w-full" style={{ height: "600px" }}>
                 <p className="text-xs text-muted-foreground">Add Tableau URL in profile.json</p>
               </div>
             )}
 
-            <div className="p-6 border-t border-border/30 w-full bg-card">
+            {/* FIX: Ensured text alignment properties match the centralized aesthetic layout */}
+            <div className="p-6 border-t border-border/30 w-full bg-card text-left">
               <h3 className="text-lg font-semibold text-foreground mb-2">
                 {project.title}
               </h3>
@@ -109,7 +110,7 @@ export function Projects() {
               )}
 
               {valid && project.sourceUrl && (
-                <Link href={project.sourceUrl} target="_blank" rel="noopener noreferrer">
+                <Link href={project.sourceUrl} target="_blank" rel="noopener noreferrer" className="w-full">
                   <Button
                     variant="outline"
                     className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
