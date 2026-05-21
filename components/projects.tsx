@@ -1,8 +1,17 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { ExternalLink, Code2, Github, Star, User, Plus, ChevronLeft, ChevronRight } from "lucide-react"
+import {
+  ExternalLink,
+  Code2,
+  Github,
+  Star,
+  User,
+  Plus,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -24,56 +33,138 @@ interface PythonProject {
   features: string[]
 }
 
-function TableauEmbed({ url }: { url: string }) {
+/**
+ * TableauEmbed
+ *
+ * Renders a Tableau iframe and **scales it** so the entire dashboard content
+ * is visible and centered inside the card. This uses a measured container size
+ * and scales the iframe proportionally (CSS transform) so nothing is cropped.
+ *
+ * If your dashboard natural size differs, pass naturalWidth/naturalHeight props.
+ */
+function TableauEmbed({
+  url,
+  naturalWidth = 1400,
+  naturalHeight = 1100,
+}: {
+  url: string
+  naturalWidth?: number
+  naturalHeight?: number
+}) {
   const match = url.match(/\/viz\/([^/]+)\/([^/?]+)/)
   const vizUrl = match
     ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no`
     : `${url}?:embed=y&:showVizHome=no&:toolbar=yes`
 
-  const VIZ_WIDTH = 1400
-  const VIZ_HEIGHT = 1100 // bump this up if your dashboard is taller
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const iframeRef = useRef<HTMLIFrameElement | null>(null)
+  const [scale, setScale] = useState(1)
 
+  // Recalculate scale to fit the container while preserving aspect ratio
+  useLayoutEffect(() => {
+    if (!containerRef.current) return
+
+    const compute = () => {
+      const container = containerRef.current!
+      const cw = container.clientWidth
+      const ch = container.clientHeight
+
+      // If container has zero height (rare), use viewport height fallback
+      const containerHeight = ch || Math.max(window.innerHeight - 200, 600)
+
+      const scaleX = cw / naturalWidth
+      const scaleY = containerHeight / naturalHeight
+      const newScale = Math.min(scaleX, scaleY, 1) // don't upscale beyond 1
+
+      setScale(newScale)
+    }
+
+    compute()
+
+    // Resize observer for container and window resize fallback
+    const ro = new ResizeObserver(() => compute())
+    ro.observe(containerRef.current)
+
+    const onResize = () => compute()
+    window.addEventListener("resize", onResize)
+
+    return () => {
+      ro.disconnect()
+      window.removeEventListener("resize", onResize)
+    }
+  }, [naturalWidth, naturalHeight])
+
+  // Wrapper styles:
+  // - outer wrapper centers content and provides dark background
+  // - inner viewport has fixed height equal to naturalHeight * scale so the page layout reserves space
+  // - iframe is rendered at its natural size and scaled via transform so the entire viz is visible
   return (
     <div
       style={{
         width: "100%",
-        background: "rgba(15,15,20,0.9)",
-        padding: "24px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        background: "rgba(15,15,20,0.9)",
+        padding: "20px",
       }}
     >
-      <iframe
-        src={vizUrl}
+      <div
+        ref={containerRef}
         style={{
           width: "100%",
-          maxWidth: `${VIZ_WIDTH}px`,
-          height: `${VIZ_HEIGHT}px`,
-          border: "none",
+          maxWidth: `${naturalWidth}px`,
+          // Reserve vertical space so the scaled iframe doesn't overflow the card.
+          // This height will be naturalHeight * scale (updated via state).
+          height: `${Math.ceil(naturalHeight * scale)}px`,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          overflow: "hidden",
+          position: "relative",
         }}
-        allowFullScreen
-        title="Tableau Visualization"
-      />
+      >
+        <iframe
+          ref={iframeRef}
+          src={vizUrl}
+          title="Tableau Visualization"
+          style={{
+            width: `${naturalWidth}px`,
+            height: `${naturalHeight}px`,
+            border: "none",
+            transform: `scale(${scale})`,
+            transformOrigin: "top left",
+            // Prevent pointer events issues when scaled
+            willChange: "transform",
+            display: "block",
+          }}
+          allowFullScreen
+        />
+      </div>
     </div>
   )
 }
 
 export function Projects() {
+  // Merge profileData.myTableauProjects with the two requested vizzes
   const myProjects: TableauProject[] = [
     ...(profileData.myTableauProjects || []),
 
+    // Added vizzes
     {
       title: "Citizen Service Requests",
       description: "A Tableau dashboard analyzing citizen service request patterns.",
       embedUrl: "https://public.tableau.com/views/citizeenservicerequests/main",
-      sourceUrl: "https://public.tableau.com/app/profile/nur.adhyaksa.hamid/viz/citizeenservicerequests/main",
+      sourceUrl:
+        "https://public.tableau.com/app/profile/nur.adhyaksa.hamid/viz/citizeenservicerequests/main",
     },
     {
       title: "Exploratory Dashboard",
       description: "A Tableau exploratory dashboard by Ed Myers.",
-      embedUrl: "https://public.tableau.com/views/ExploratoryDashboard_16183795969740/Dashboard2",
-      sourceUrl: "https://public.tableau.com/app/profile/ed.myers/viz/ExploratoryDashboard_16183795969740/Dashboard2",
+      embedUrl:
+        "https://public.tableau.com/views/ExploratoryDashboard_16183795969740/Dashboard2",
+      sourceUrl:
+        "https://public.tableau.com/app/profile/ed.myers/viz/ExploratoryDashboard_16183795969740/Dashboard2",
     },
   ]
 
@@ -156,6 +247,7 @@ export function Projects() {
   return (
     <section id="projects" className="py-24">
       <div className="w-full mx-auto px-4">
+        {/* MY PROJECTS CAROUSEL */}
         {hasMyProjects && (
           <div className="mb-20">
             <div className="text-center mb-10">
@@ -163,22 +255,33 @@ export function Projects() {
                 {profileData.sectionTitles?.myTableauProjects || "My Tableau Projects"}
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
-                {profileData.sectionDescriptions?.myTableauProjects || "Interactive data visualizations I created"}
+                {profileData.sectionDescriptions?.myTableauProjects ||
+                  "Interactive data visualizations I created"}
               </p>
               <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
 
             <div className="relative w-full max-w-[1400px] mx-auto">
+              {/* LEFT ARROW */}
               <button
                 onClick={prev}
+                aria-label="Previous visualization"
                 className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-3 rounded-full z-10"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
 
+              {/* CURRENT VIZ CARD */}
               <Card className="bg-card/50 border-border/50 backdrop-blur-sm w-full overflow-visible">
                 <CardContent className="p-0">
-                  <TableauEmbed url={currentProject.embedUrl} />
+                  {/* Use TableauEmbed with natural size that matches typical Tableau dashboards.
+                      If a specific dashboard is known to be taller/wider, you can pass props
+                      naturalWidth/naturalHeight to TableauEmbed when rendering. */}
+                  <TableauEmbed
+                    url={currentProject.embedUrl}
+                    // If you know a specific dashboard natural size, pass it here:
+                    // naturalWidth={1400} naturalHeight={1200}
+                  />
 
                   <div className="p-6 border-t border-border/30">
                     <h3 className="text-lg font-semibold text-foreground mb-2">
@@ -203,8 +306,10 @@ export function Projects() {
                 </CardContent>
               </Card>
 
+              {/* RIGHT ARROW */}
               <button
                 onClick={next}
+                aria-label="Next visualization"
                 className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-3 rounded-full z-10"
               >
                 <ChevronRight className="w-6 h-6" />
@@ -213,6 +318,7 @@ export function Projects() {
           </div>
         )}
 
+        {/* CURATED PROJECTS */}
         {hasCuratedProjects && (
           <div className="mb-20">
             <div className="text-center mb-10">
@@ -220,7 +326,8 @@ export function Projects() {
                 {profileData.sectionTitles?.curatedTableauProjects || "Curated Tableau Visualizations"}
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
-                {profileData.sectionDescriptions?.curatedTableauProjects || "Outstanding visualizations I found inspiring"}
+                {profileData.sectionDescriptions?.curatedTableauProjects ||
+                  "Outstanding visualizations I found inspiring"}
               </p>
               <div className="w-20 h-1 bg-accent mx-auto rounded-full" />
             </div>
@@ -275,13 +382,14 @@ export function Projects() {
           </div>
         )}
 
+        {/* PYTHON PROJECTS */}
         {hasPythonProjects && (
           <div className="mb-8">
             <div className="text-center mb-10">
               <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
                 {profileData.sectionTitles?.pythonProjects || "Python Projects"}
               </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
+              <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
                 {profileData.sectionDescriptions?.pythonProjects || "Python applications and scripts"}
               </p>
               <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
@@ -295,6 +403,7 @@ export function Projects() {
           </div>
         )}
 
+        {/* EMPTY STATE */}
         {!hasAnyProjects && (
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Projects</h2>
