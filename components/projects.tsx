@@ -71,9 +71,13 @@ export function Projects() {
           <CardContent className="p-0 w-full flex flex-col justify-center items-center text-center">
             {isCurated && (
               <div className="flex justify-end w-full p-3">
-                <Badge className="bg-accent text-accent-foreground"><Star className="w-3 h-3 mr-1" />Curated</Badge>
+                <Badge className="bg-accent text-accent-foreground">
+                  <Star className="w-3 h-3 mr-1" />
+                  Curated
+                </Badge>
               </div>
             )}
+
             {valid ? (
               <div className="w-full relative mx-auto flex justify-center items-center bg-transparent">
                 <TableauEmbed url={project.embedUrl} />
@@ -83,6 +87,7 @@ export function Projects() {
                 <p className="text-xs text-muted-foreground">Add Tableau URL in profile.json</p>
               </div>
             )}
+
             <div className="p-6 border-t border-border/30 w-full bg-card text-left">
               <h3 className="text-lg font-semibold text-foreground mb-2">{project.title}</h3>
               <p className="text-muted-foreground text-sm mb-3">{project.description}</p>
@@ -142,6 +147,9 @@ export function Projects() {
       <CardContent className="p-8 text-center h-full flex flex-col items-center justify-center">
         <Plus className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
         <p className="text-sm text-muted-foreground mb-2">Add your first {type}</p>
+        <p className="text-xs text-muted-foreground">
+          Edit <code className="px-1.5 py-0.5 bg-secondary/50 rounded text-primary">data/profile.json</code>
+        </p>
       </CardContent>
     </Card>
   )
@@ -152,29 +160,29 @@ export function Projects() {
         {hasMyProjects && (
           <div className="mb-20 w-full flex flex-col items-center justify-center">
             <div className="text-center mb-10">
-                <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">{profileData.sectionTitles?.myTableauProjects || "My Tableau Projects"}</h2>
-                <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">{profileData.sectionTitles?.myTableauProjects || "My Tableau Projects"}</h2>
+              <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
-            {myProjects.map((p, i) => <TableauCard key={i} project={p} />)}
+            {myProjects.map((project, index) => <TableauCard key={index} project={project} />)}
           </div>
         )}
         {hasCuratedProjects && (
           <div className="mb-20 w-full flex flex-col items-center justify-center">
             <div className="text-center mb-10">
-                <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">{profileData.sectionTitles?.curatedTableauProjects || "Curated Tableau Visualizations"}</h2>
-                <div className="w-20 h-1 bg-accent mx-auto rounded-full" />
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">{profileData.sectionTitles?.curatedTableauProjects || "Curated Tableau Visualizations"}</h2>
+              <div className="w-20 h-1 bg-accent mx-auto rounded-full" />
             </div>
-            {curatedProjects.map((p, i) => <TableauCard key={i} project={p} isCurated />)}
+            {curatedProjects.map((project, index) => <TableauCard key={index} project={project} isCurated />)}
           </div>
         )}
         {hasPythonProjects && (
-          <div className="w-full">
+          <div className="w-full mb-20">
             <div className="text-center mb-10">
-                <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">{profileData.sectionTitles?.pythonProjects || "Python Projects"}</h2>
-                <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">{profileData.sectionTitles?.pythonProjects || "Python Projects"}</h2>
+              <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
-              {pythonProjects.map((p, i) => <PythonCard key={i} project={p} />)}
+              {pythonProjects.map((project, index) => <PythonCard key={index} project={project} />)}
             </div>
           </div>
         )}
@@ -187,6 +195,12 @@ export function Projects() {
               <EmptyAddCard type="Python project" />
             </div>
           </div>
+        )}
+        {hasAnyProjects && (
+          <p className="text-center text-sm text-muted-foreground mt-12">
+            Add or remove projects by editing{" "}
+            <code className="px-2 py-1 bg-secondary/50 rounded text-primary">data/profile.json</code>
+          </p>
         )}
       </div>
     </section>
