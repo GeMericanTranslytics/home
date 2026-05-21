@@ -25,8 +25,9 @@ interface PythonProject {
 }
 
 function TableauEmbed({ url }: { url: string }) {
-  const baseUrl = url.split('?')[0]
-  const vizUrl = `${baseUrl}?:embed=y&:showVizHome=no&:toolbar=yes&:fit=yes&:display_count=n`
+  // We strip existing params to avoid URI errors
+  const baseUrl = url.split('?')[0];
+  const vizUrl = `${baseUrl}?:embed=y&:showVizHome=no&:toolbar=yes&:fit=yes&:display_count=n`;
 
   return (
     <div className="w-full h-[700px] relative overflow-hidden">
@@ -78,7 +79,7 @@ export function Projects() {
               </div>
             ) : (
               <div className="flex items-center justify-center bg-secondary/30 w-full aspect-video">
-                <p className="text-xs text-muted-foreground">Add Tableau URL in profile.json</p>
+                <p className="text-xs text-muted-foreground">Add valid Tableau URL in profile.json</p>
               </div>
             )}
             <div className="p-6 border-t border-border/30 w-full bg-card">
@@ -123,15 +124,6 @@ export function Projects() {
     </Card>
   )
 
-  const EmptyAddCard = ({ type }: { type: string }) => (
-    <Card className="bg-card/30 border-border/30 border-dashed h-full flex items-center justify-center">
-      <CardContent className="p-8 text-center">
-        <Plus className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
-        <p className="text-sm text-muted-foreground">Add your first {type}</p>
-      </CardContent>
-    </Card>
-  )
-
   return (
     <section id="projects" className="py-24 w-full">
       <div className="container mx-auto px-4">
@@ -154,12 +146,6 @@ export function Projects() {
               {pythonProjects.map((p, i) => <PythonCard key={i} project={p} />)}
             </div>
           </div>
-        )}
-        {!hasAnyProjects && (
-           <div className="text-center py-20">
-             <h2 className="text-2xl font-bold text-muted-foreground">No projects added yet.</h2>
-             <p className="mt-2 text-muted-foreground">Edit <code className="bg-secondary px-1 rounded">data/profile.json</code> to get started.</p>
-           </div>
         )}
       </div>
     </section>
