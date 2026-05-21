@@ -33,6 +33,14 @@ interface PythonProject {
   features: string[]
 }
 
+/**
+ * TableauEmbed
+ * FINAL VERSION:
+ * - Centers the viz
+ * - Scales the viz to fit width
+ * - Never cuts off right side
+ * - No scrollbars
+ */
 function TableauEmbed({
   url,
   naturalWidth = 1800,
@@ -223,7 +231,7 @@ export function Projects() {
               <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
 
-            {/* 🔥 FIX: remove max-w-[1400px] */}
+            {/* FIX: remove max-width constraint */}
             <div className="relative w-full mx-auto">
               <button
                 onClick={prev}
