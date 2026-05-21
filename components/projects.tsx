@@ -27,14 +27,14 @@ interface PythonProject {
 function TableauEmbed({ url }: { url: string }) {
   const match = url.match(/\/viz\/([^/]+)\/([^/?]+)/)
   
-  /* FIX: Added &:size=100%,100% and removed rigid device overrides. This forces the internal Tableau canvas layout to auto-fit whatever pixel boundaries the website container gives it. */
+  /* Auto-fits Tableau canvas layout perfectly to whatever container dimensions are provided by the website wrapper */
   const vizUrl = match
     ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no&:size=100%,100%&:apiID=host0`
     : `${url}?:embed=y&:showVizHome=no&:toolbar=yes&:size=100%,100%`
 
   return (
-    /* FIX: Used explicit, responsive height utilities instead of padding percentages. This ensures the dashboard fits cleanly within a beautifully proportioned container across all viewports. */
-    <div className="w-full h-[600px] sm:h-[700px] md:h-[800px] lg:h-[850px] relative overflow-hidden bg-background/5">
+    /* Fluid responsive vertical height block to handle the auto-fit canvas layout across viewports cleanly */
+    <div className="w-full h-[500px] sm:h-[600px] md:h-[750px] lg:h-[800px] xl:h-[850px] relative overflow-hidden bg-background/5">
       <iframe
         src={vizUrl}
         style={{
@@ -70,7 +70,8 @@ export function Projects() {
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
-      <div className="w-full max-w-6xl mx-auto flex flex-col items-center justify-center px-4">
+      /* FIX: Changed width class to exactly 70% of the available viewport window (70vw), centered with mx-auto */
+      <div className="w-[70vw] max-w-full mx-auto flex flex-col items-center justify-center px-4">
         <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full overflow-hidden mx-auto">
           <CardContent className="p-0 w-full flex flex-col justify-center">
             {isCurated && (
