@@ -12,7 +12,6 @@
     "about": "About Me",
     "skills": "Skills & Expertise",
     "experience": "Professional Experience",
-    "myTableauProjects": "My Tableau Projects",
     "curatedTableauProjects": "Curated Tableau Visualizations",
     "pythonProjects": "Python Projects",
     "interviewPrep": "Interview Preparation",
@@ -23,7 +22,6 @@
     "about": "Get to know my background and expertise",
     "skills": "Technical and professional competencies",
     "experience": "Career highlights and achievements",
-    "myTableauProjects": "Interactive data visualizations I created to showcase analytics and insights",
     "curatedTableauProjects": "Outstanding Tableau visualizations I found inspiring and worth sharing",
     "pythonProjects": "Python applications and scripts demonstrating programming skills",
     "interviewPrep": "Questions, notes, and resources for interview success",
@@ -73,43 +71,17 @@
       ]
     }
   ],
-  
-"myTableauProjects": [],
-  
-"curatedTableauProjects": [
-  {
-    "title": "Solar System Data for Kids",
-    "description": "An engaging visualization of solar system data",
-    "embedUrl": "https://public.tableau.com/app/profile/andy.zinovei/viz/SolarSystemData2Kids/SolarSystemData2Kids",
-    "thumbnail": "",
-    "author": "",
-    "sourceUrl": "https://public.tableau.com/app/profile/andy.zinovei/viz/SolarSystemData2Kids/SolarSystemData2Kids"
-  },
-  {
-    "title": "Gym Tracker",
-    "description": "Interactive fitness and gym tracking dashboard",
-    "embedUrl": "https://public.tableau.com/app/profile/roshaan.khan/viz/GymTracker/GymTracker",
-    "thumbnail": "",
-    "author": "",
-    "sourceUrl": "https://public.tableau.com/app/profile/roshaan.khan/viz/GymTracker/GymTracker"
-  },
-  {
-    "title": "Bundesliga Dashboard",
-    "description": "Bundesliga football statistics and insights",
-    "embedUrl": "https://public.tableau.com/app/profile/sany.tchanra/viz/Bundesliga_1/Dashboard1",
-    "thumbnail": "",
-    "author": "",
-    "sourceUrl": "https://public.tableau.com/app/profile/sany.tchanra/viz/Bundesliga_1/Dashboard1"
-  },
-  {
-    "title": "Premier League Dashboard",
-    "description": "Premier League football statistics and insights",
-    "embedUrl": "https://public.tableau.com/app/profile/shubham.waghmare/viz/premierleauge/Dashboard1",
-    "thumbnail": "",
-    "author": "",
-    "sourceUrl": "https://public.tableau.com/app/profile/shubham.waghmare/viz/premierleauge/Dashboard1"
-  }
-],
+
+  "curatedTableauProjects": [
+    {
+      "title": "Superstore Performance Dashboard",
+      "description": "Dynamic KPI dashboard with dark/light mode toggle showcasing retail performance metrics",
+      "embedUrl": "https://public.tableau.com/app/profile/shangruff/viz/SuperstorePerformanceDashboardDynamicKPIColorwithDark-LightMode/Overview-DarkMode",
+      "thumbnail": "",
+      "author": "shangruff",
+      "sourceUrl": "https://public.tableau.com/app/profile/shangruff/viz/SuperstorePerformanceDashboardDynamicKPIColorwithDark-LightMode/Overview-DarkMode"
+    }
+  ],
   
   "pythonProjects": [
     {
