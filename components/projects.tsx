@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef } from "react"
 import Link from "next/link"
 import { ExternalLink, Code2, Github, Star, User, Plus } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
@@ -25,17 +25,40 @@ interface PythonProject {
   features: string[]
 }
 
+function TableauEmbed({ url }: { url: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  const match = url.match(/\/viz\/([^/]+)\/([^/?]+)/)
+  const vizUrl = match
+    ? `https://public.tableau.com/views/${match[1]}/${match[2]}`
+    : url
+
+  return (
+    <div ref={ref} style={{ width: "100%", height: "700px", overflow: "hidden" }}>
+      <tableau-viz
+        src={vizUrl}
+        width="100%"
+        height="700"
+        hide-tabs
+        toolbar="bottom"
+      />
+    </div>
+  )
+}
+
 export function Projects() {
+  useEffect(() => {
+    const script = document.createElement("script")
+    script.src = "https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"
+    script.type = "module"
+    document.head.appendChild(script)
+    return () => {
+      document.head.removeChild(script)
+    }
+  }, [])
+
   const isValidEmbedUrl = (url: string) => {
     return url && !url.includes("YOUR_TABLEAU") && !url.includes("YOUR_CURATED")
-  }
-
-  const getTableauEmbedUrl = (url: string) => {
-    const viewsMatch = url.match(/\/viz\/([^/]+)\/([^/?]+)/)
-    if (viewsMatch) {
-      return `https://public.tableau.com/views/${viewsMatch[1]}/${viewsMatch[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:device=desktop`
-    }
-    return `${url}?:embed=y&:showVizHome=no&:toolbar=yes`
   }
 
   const myProjects: TableauProject[] = profileData.myTableauProjects || []
@@ -48,20 +71,18 @@ export function Projects() {
   const hasAnyProjects = hasMyProjects || hasCuratedProjects || hasPythonProjects
 
   const getGridCols = (count: number) => {
-    if (count === 1) return "grid-cols-1 max-w-3xl mx-auto"
+    if (count === 1) return "grid-cols-1 max-w-5xl mx-auto"
     if (count === 2) return "grid-cols-1 md:grid-cols-2"
     return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
   }
 
   const TableauCard = ({ project, isCurated = false }: { project: TableauProject; isCurated?: boolean }) => {
-    const [loaded, setLoaded] = useState(false)
-    const embedUrl = getTableauEmbedUrl(project.embedUrl)
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
       <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 overflow-hidden">
         <CardContent className="p-0">
-          <div className="relative w-full" style={{ height: "420px" }}>
+          <div className="relative w-full bg-secondary/10" style={{ height: "700px" }}>
             {isCurated && (
               <Badge className="absolute top-3 right-3 z-10 bg-accent text-accent-foreground">
                 <Star className="w-3 h-3 mr-1" />
@@ -69,24 +90,7 @@ export function Projects() {
               </Badge>
             )}
             {valid ? (
-              <>
-                {!loaded && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-secondary/30 z-10">
-                    <p className="text-xs text-muted-foreground animate-pulse">Loading visualization...</p>
-                  </div>
-                )}
-                <iframe
-                  src={embedUrl}
-                  width="100%"
-                  height="100%"
-                  frameBorder="0"
-                  scrolling="no"
-                  allowFullScreen
-                  title={project.title}
-                  onLoad={() => setLoaded(true)}
-                  style={{ display: "block" }}
-                />
-              </>
+              <TableauEmbed url={project.embedUrl} />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center bg-secondary/30">
                 <p className="text-xs text-muted-foreground">Add Tableau URL in profile.json</p>
@@ -109,19 +113,17 @@ export function Projects() {
               </div>
             )}
 
-            <div className="flex gap-2">
-              {valid && project.sourceUrl && (
-                <Link href={project.sourceUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
-                  <Button
-                    variant="outline"
-                    className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all text-sm"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                    Open in Tableau
-                  </Button>
-                </Link>
-              )}
-            </div>
+            {valid && project.sourceUrl && (
+              <Link href={project.sourceUrl} target="_blank" rel="noopener noreferrer">
+                <Button
+                  variant="outline"
+                  className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all text-sm"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  Open in Tableau
+                </Button>
+              </Link>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -195,7 +197,6 @@ export function Projects() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
 
-          {/* My Tableau Projects */}
           {hasMyProjects && (
             <div className="mb-20">
               <div className="text-center mb-10">
@@ -215,7 +216,6 @@ export function Projects() {
             </div>
           )}
 
-          {/* Curated Tableau Projects */}
           {hasCuratedProjects && (
             <div className="mb-20">
               <div className="text-center mb-10">
@@ -235,7 +235,6 @@ export function Projects() {
             </div>
           )}
 
-          {/* Python Projects */}
           {hasPythonProjects && (
             <div className="mb-8">
               <div className="text-center mb-10">
@@ -255,7 +254,6 @@ export function Projects() {
             </div>
           )}
 
-          {/* No Projects State */}
           {!hasAnyProjects && (
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Projects</h2>
