@@ -34,11 +34,11 @@ function TableauEmbed({ url }: { url: string }) {
     : url
 
   return (
-    <div ref={ref} style={{ width: "100%", height: "700px", overflow: "hidden" }}>
+    <div ref={ref} style={{ width: "100%", height: "850px" }}>
       <tableau-viz
         src={vizUrl}
         width="100%"
-        height="700"
+        height="850"
         hide-tabs
         toolbar="bottom"
       />
@@ -70,19 +70,14 @@ export function Projects() {
   const hasPythonProjects = pythonProjects.length > 0
   const hasAnyProjects = hasMyProjects || hasCuratedProjects || hasPythonProjects
 
-  const getGridCols = (count: number) => {
-    if (count === 1) return "grid-cols-1 max-w-5xl mx-auto"
-    if (count === 2) return "grid-cols-1 md:grid-cols-2"
-    return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-  }
-
   const TableauCard = ({ project, isCurated = false }: { project: TableauProject; isCurated?: boolean }) => {
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
-      <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 overflow-hidden">
+      <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 overflow-hidden w-full">
         <CardContent className="p-0">
-          <div className="relative w-full bg-secondary/10" style={{ height: "700px" }}>
+          {/* Viz area - full width, tall enough to show everything */}
+          <div className="relative w-full" style={{ height: "850px" }}>
             {isCurated && (
               <Badge className="absolute top-3 right-3 z-10 bg-accent text-accent-foreground">
                 <Star className="w-3 h-3 mr-1" />
@@ -98,16 +93,17 @@ export function Projects() {
             )}
           </div>
 
-          <div className="p-5">
-            <h3 className="text-base font-semibold text-foreground mb-1 line-clamp-1">
+          {/* Footer */}
+          <div className="p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               {project.title}
             </h3>
-            <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
+            <p className="text-muted-foreground text-sm mb-3">
               {project.description}
             </p>
 
             {isCurated && project.author && (
-              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
                 <User className="w-3 h-3" />
                 <span>By {project.author}</span>
               </div>
@@ -117,9 +113,9 @@ export function Projects() {
               <Link href={project.sourceUrl} target="_blank" rel="noopener noreferrer">
                 <Button
                   variant="outline"
-                  className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all text-sm"
+                  className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
                 >
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <ExternalLink className="w-4 h-4" />
                   Open in Tableau
                 </Button>
               </Link>
@@ -194,87 +190,90 @@ export function Projects() {
 
   return (
     <section id="projects" className="py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
+      {/* Full width container - 90% of screen */}
+      <div className="w-[90%] mx-auto px-4">
 
-          {hasMyProjects && (
-            <div className="mb-20">
-              <div className="text-center mb-10">
-                <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-                  {profileData.sectionTitles?.myTableauProjects || "My Tableau Projects"}
-                </h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
-                  {profileData.sectionDescriptions?.myTableauProjects || "Interactive data visualizations I created"}
-                </p>
-                <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
-              </div>
-              <div className={`grid ${getGridCols(myProjects.length)} gap-6`}>
-                {myProjects.map((project, index) => (
-                  <TableauCard key={index} project={project} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {hasCuratedProjects && (
-            <div className="mb-20">
-              <div className="text-center mb-10">
-                <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-                  {profileData.sectionTitles?.curatedTableauProjects || "Curated Tableau Visualizations"}
-                </h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
-                  {profileData.sectionDescriptions?.curatedTableauProjects || "Outstanding visualizations I found inspiring"}
-                </p>
-                <div className="w-20 h-1 bg-accent mx-auto rounded-full" />
-              </div>
-              <div className={`grid ${getGridCols(curatedProjects.length)} gap-6`}>
-                {curatedProjects.map((project, index) => (
-                  <TableauCard key={index} project={project} isCurated />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {hasPythonProjects && (
-            <div className="mb-8">
-              <div className="text-center mb-10">
-                <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-                  {profileData.sectionTitles?.pythonProjects || "Python Projects"}
-                </h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
-                  {profileData.sectionDescriptions?.pythonProjects || "Python applications and scripts"}
-                </p>
-                <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
-              </div>
-              <div className={`grid ${getGridCols(pythonProjects.length)} gap-6`}>
-                {pythonProjects.map((project, index) => (
-                  <PythonCard key={index} project={project} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {!hasAnyProjects && (
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Projects</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
-                Add your Tableau visualizations and Python projects to showcase your work
+        {/* My Tableau Projects */}
+        {hasMyProjects && (
+          <div className="mb-20">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+                {profileData.sectionTitles?.myTableauProjects || "My Tableau Projects"}
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
+                {profileData.sectionDescriptions?.myTableauProjects || "Interactive data visualizations I created"}
               </p>
-              <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                <EmptyAddCard type="Tableau project" />
-                <EmptyAddCard type="curated visualization" />
-                <EmptyAddCard type="Python project" />
-              </div>
+              <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
-          )}
+            <div className="flex flex-col gap-8">
+              {myProjects.map((project, index) => (
+                <TableauCard key={index} project={project} />
+              ))}
+            </div>
+          </div>
+        )}
 
-          {hasAnyProjects && (
-            <p className="text-center text-sm text-muted-foreground mt-12">
-              Add or remove projects by editing{" "}
-              <code className="px-2 py-1 bg-secondary/50 rounded text-primary">data/profile.json</code>
+        {/* Curated Tableau Projects */}
+        {hasCuratedProjects && (
+          <div className="mb-20">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+                {profileData.sectionTitles?.curatedTableauProjects || "Curated Tableau Visualizations"}
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
+                {profileData.sectionDescriptions?.curatedTableauProjects || "Outstanding visualizations I found inspiring"}
+              </p>
+              <div className="w-20 h-1 bg-accent mx-auto rounded-full" />
+            </div>
+            <div className="flex flex-col gap-8">
+              {curatedProjects.map((project, index) => (
+                <TableauCard key={index} project={project} isCurated />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Python Projects */}
+        {hasPythonProjects && (
+          <div className="mb-8">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+                {profileData.sectionTitles?.pythonProjects || "Python Projects"}
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
+                {profileData.sectionDescriptions?.pythonProjects || "Python applications and scripts"}
+              </p>
+              <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {pythonProjects.map((project, index) => (
+                <PythonCard key={index} project={project} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* No Projects State */}
+        {!hasAnyProjects && (
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Projects</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
+              Add your Tableau visualizations and Python projects to showcase your work
             </p>
-          )}
-        </div>
+            <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              <EmptyAddCard type="Tableau project" />
+              <EmptyAddCard type="curated visualization" />
+              <EmptyAddCard type="Python project" />
+            </div>
+          </div>
+        )}
+
+        {hasAnyProjects && (
+          <p className="text-center text-sm text-muted-foreground mt-12">
+            Add or remove projects by editing{" "}
+            <code className="px-2 py-1 bg-secondary/50 rounded text-primary">data/profile.json</code>
+          </p>
+        )}
       </div>
     </section>
   )
