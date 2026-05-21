@@ -1,3 +1,15 @@
+Ah, I see exactly what is happening now. Look at the right-hand side of your screenshot: the dashboard metrics ("Sales by Ship Mode") are abruptly clipped, and a tiny piece of a scrollbar is visible at the very bottom right.
+
+This means the iframe box is large enough on your website now, but **Tableau is internally cutting off its own content** because the dashboard's internal fixed pixel layout width (set inside Tableau Desktop when it was built) is wider than the `max-w-6xl` (`1152px`) container limit we applied in Tailwind.
+
+To fix this once and for all, we need to do two things:
+
+1. Increase the container cap to `max-w-7xl` (`1280px`) or full width so the layout has room to stretch natively without squeezing into a horizontal mobile breakpoint.
+2. Add explicit horizontal overflow helpers (`overflow-x-auto`) to the outer card. That way, if a user views it on a slightly smaller screen, the dashboard will scroll smoothly side-to-side rather than cutting off into oblivion.
+
+Here is your updated full code:
+
+```tsx
 "use client"
 
 import Link from "next/link"
@@ -31,8 +43,8 @@ function TableauEmbed({ url }: { url: string }) {
     : `${url}?:embed=y&:showVizHome=no&:toolbar=yes`
 
   return (
-    /* Fix: Set a minimum height and remove the padding-bottom hack so the dashboard has room to display entirely */
-    <div className="w-full min-h-[650px] md:min-h-[800px] lg:min-h-[850px] relative overflow-x-auto overflow-y-hidden">
+    /* Fix: Increased minimum height to 900px to fully show the bottom row, and forced full-width expansion */
+    <div className="w-full min-h-[700px] md:min-h-[850px] lg:min-h-[900px] relative">
       <iframe
         src={vizUrl}
         style={{
@@ -68,9 +80,11 @@ export function Projects() {
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
-      <div className="w-full max-w-6xl mx-auto flex flex-col items-center justify-center px-4">
+      /* Fix: Changed from max-w-6xl to max-w-7xl to stop Tableau from horizontally cropping the desktop render */
+      <div className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center px-4">
         <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full overflow-hidden mx-auto">
-          <CardContent className="p-0 w-full flex flex-col justify-center">
+          {/* Fix: Added overflow-x-auto here to safeguard smaller tablet displays without truncating components */}
+          <CardContent className="p-0 w-full flex flex-col justify-center overflow-x-auto scrollbar-thin">
             {isCurated && (
               <div className="flex justify-end p-3">
                 <Badge className="bg-accent text-accent-foreground">
@@ -81,7 +95,7 @@ export function Projects() {
             )}
 
             {valid ? (
-              <div className="w-full">
+              <div className="w-full min-w-[1000px] lg:min-w-full">
                 <TableauEmbed url={project.embedUrl} />
               </div>
             ) : (
@@ -90,7 +104,7 @@ export function Projects() {
               </div>
             )}
 
-            <div className="p-6 border-t border-border/30 w-full">
+            <div className="p-6 border-t border-border/30 w-full bg-card">
               <h3 className="text-lg font-semibold text-foreground mb-2">
                 {project.title}
               </h3>
@@ -270,3 +284,5 @@ export function Projects() {
     </section>
   )
 }
+
+```
