@@ -35,16 +35,13 @@ interface PythonProject {
 
 /**
  * TableauEmbed
- *
- * This version FIXES the width‑cutoff problem by:
- * - Rendering the iframe at its natural size (e.g., 1800px wide)
- * - Scaling it DOWN to fit the container width
- * - Automatically adjusting height so nothing is clipped
+ * - Scales the viz down to fit width (no cropping)
+ * - Centers the viz horizontally
  */
 function TableauEmbed({
   url,
-  naturalWidth = 1800,   // Tableau dashboards are often ~1800px wide
-  naturalHeight = 1100,  // Adjust if needed
+  naturalWidth = 1800,
+  naturalHeight = 1100,
 }: {
   url: string
   naturalWidth?: number
@@ -96,7 +93,9 @@ function TableauEmbed({
           maxWidth: "100%",
           height: naturalHeight * scale,
           overflow: "visible",
-          position: "relative",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "flex-start",
         }}
       >
         <iframe
@@ -106,10 +105,8 @@ function TableauEmbed({
             height: naturalHeight,
             border: "none",
             transform: `scale(${scale})`,
-            transformOrigin: "top left",
-            position: "absolute",
-            top: 0,
-            left: 0,
+            transformOrigin: "top center",
+            display: "block",
           }}
           allowFullScreen
           title="Tableau Visualization"
