@@ -27,14 +27,14 @@ interface PythonProject {
 function TableauEmbed({ url }: { url: string }) {
   const match = url.match(/\/viz\/([^/]+)\/([^/?]+)/)
   
-  /* FIX: Standardized using URL encoded format (%3A for ':', %3D for '=') to ensure the browser cleanly routes parameters to the Tableau rendering engine */
+  /* Added display_count=n parameter to strip away extra padding algorithms */
   const vizUrl = match
-    ? `https://public.tableau.com/views/${match[1]}/${match[2]}?%3Aembed=y&%3AshowVizHome=no&%3Atoolbar=yes&%3Atabs=no&%3Asize=100%25,100%25&%3AapiID=host0`
-    : `${url}?%3Aembed=y&%3AshowVizHome=no&%3Atoolbar=yes&%3Asize=100%25,100%25`
+    ? `https://public.tableau.com/views/${match[1]}/${match[2]}?%3Aembed=y&%3AshowVizHome=no&%3Atoolbar=yes&%3Atabs=no&%3Asize=100%25,100%25&%3Adisplay_count=n&%3AapiID=host0`
+    : `${url}?%3Aembed=y&%3AshowVizHome=no&%3Atoolbar=yes&%3Asize=100%25,100%25&%3Adisplay_count=n`
 
   return (
-    /* FIX: Added flex, justify-center, and items-center here to override Tableau's top-left anchoring default and force the canvas to center symmetrically */
-    <div className="w-full h-[500px] sm:h-[600px] md:h-[750px] lg:h-[800px] xl:h-[850px] relative overflow-hidden bg-background/5 flex justify-center items-center">
+    /* FIX: Deleted the fixed pixel heights (h-[800px]). Replaced with a fluid aspect ratio (aspect-[16/10] down to 16/9) to shrink-wrap the container directly against the dashboard's natural borders. */
+    <div className="w-full aspect-[4/3] md:aspect-[16/10] lg:aspect-[16/9] relative overflow-hidden flex justify-center items-center">
       <iframe
         src={vizUrl}
         style={{
@@ -44,7 +44,6 @@ function TableauEmbed({ url }: { url: string }) {
           width: "100%",
           height: "100%",
           border: "none",
-          margin: "0 auto" /* Double layer centering safeguard */
         }}
         allowFullScreen
         title="Tableau Visualization"
@@ -84,11 +83,11 @@ export function Projects() {
             )}
 
             {valid ? (
-              <div className="w-full relative mx-auto flex justify-center items-center">
+              <div className="w-full relative mx-auto flex justify-center items-center bg-transparent">
                 <TableauEmbed url={project.embedUrl} />
               </div>
             ) : (
-              <div className="flex items-center justify-center bg-secondary/30 w-full" style={{ height: "600px" }}>
+              <div className="flex items-center justify-center bg-secondary/30 w-full aspect-video">
                 <p className="text-xs text-muted-foreground">Add Tableau URL in profile.json</p>
               </div>
             )}
