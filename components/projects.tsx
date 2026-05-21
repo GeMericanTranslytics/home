@@ -33,11 +33,6 @@ interface PythonProject {
   features: string[]
 }
 
-/**
- * TableauEmbed
- * - Scales the viz down to fit width (no cropping)
- * - Centers the viz horizontally
- */
 function TableauEmbed({
   url,
   naturalWidth = 1800,
@@ -90,7 +85,6 @@ function TableauEmbed({
         ref={containerRef}
         style={{
           width: "100%",
-          maxWidth: "100%",
           height: naturalHeight * scale,
           overflow: "visible",
           display: "flex",
@@ -229,7 +223,8 @@ export function Projects() {
               <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
 
-            <div className="relative w-full max-w-[1400px] mx-auto">
+            {/* 🔥 FIX: remove max-w-[1400px] */}
+            <div className="relative w-full mx-auto">
               <button
                 onClick={prev}
                 aria-label="Previous visualization"
@@ -293,7 +288,7 @@ export function Projects() {
               {curatedProjects.map((project, index) => (
                 <Card
                   key={index}
-                  className="bg-card/50 border-border/50 backdrop-blur-sm w-full overflow-visible max-w-[1400px] mx-auto"
+                  className="bg-card/50 border-border/50 backdrop-blur-sm w-full overflow-visible mx-auto"
                 >
                   <CardContent className="p-0">
                     <div className="flex justify-end p-3">
