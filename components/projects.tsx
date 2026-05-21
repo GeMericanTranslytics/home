@@ -30,31 +30,39 @@ function TableauEmbed({ url }: { url: string }) {
     ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no`
     : `${url}?:embed=y&:showVizHome=no&:toolbar=yes`
 
-  const WIDTH = 1400
-  const HEIGHT = 900
-
   return (
     <div
       style={{
         width: "100%",
+        background: "rgba(15,15,20,0.9)",
+        padding: "24px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "rgba(15,15,20,0.9)",
-        padding: "24px",
       }}
     >
-      <iframe
-        src={vizUrl}
+      <div
         style={{
-          width: `${WIDTH}px`,
-          height: `${HEIGHT}px`,
-          maxWidth: "100%",
-          border: "none",
+          width: "100%",
+          maxWidth: "1400px",
+          aspectRatio: "16 / 10", // auto-expands while keeping shape
+          position: "relative",
         }}
-        allowFullScreen
-        title="Tableau Visualization"
-      />
+      >
+        <iframe
+          src={vizUrl}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            border: "none",
+          }}
+          allowFullScreen
+          title="Tableau Visualization"
+        />
+      </div>
     </div>
   )
 }
@@ -63,7 +71,6 @@ export function Projects() {
   const myProjects: TableauProject[] = [
     ...(profileData.myTableauProjects || []),
 
-    // ADDING YOUR TWO NEW VIZZES HERE
     {
       title: "Citizen Service Requests",
       description: "A Tableau dashboard analyzing citizen service request patterns.",
@@ -86,9 +93,7 @@ export function Projects() {
   const hasPythonProjects = pythonProjects.length > 0
   const hasAnyProjects = hasMyProjects || hasCuratedProjects || hasPythonProjects
 
-  // CAROUSEL STATE
   const [currentIndex, setCurrentIndex] = useState(0)
-
   const next = () => setCurrentIndex((prev) => (prev + 1) % myProjects.length)
   const prev = () => setCurrentIndex((prev) => (prev - 1 + myProjects.length) % myProjects.length)
 
@@ -160,7 +165,7 @@ export function Projects() {
     <section id="projects" className="py-24">
       <div className="w-full mx-auto px-4">
 
-        {/* MY PROJECTS CAROUSEL */}
+        {/* CAROUSEL */}
         {hasMyProjects && (
           <div className="mb-20">
             <div className="text-center mb-10">
@@ -303,7 +308,6 @@ export function Projects() {
           </div>
         )}
 
-        {/* EMPTY STATE */}
         {!hasAnyProjects && (
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Projects</h2>
