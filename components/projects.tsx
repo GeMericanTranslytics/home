@@ -25,12 +25,14 @@ interface PythonProject {
 }
 
 function TableauEmbed({ url }: { url: string }) {
-  // We strip existing params to avoid URI errors
+  // We sanitize the URL to prevent "URI malformed" errors.
+  // We strip existing query params and force our own to ensure consistency.
   const baseUrl = url.split('?')[0];
   const vizUrl = `${baseUrl}?:embed=y&:showVizHome=no&:toolbar=yes&:fit=yes&:display_count=n`;
 
   return (
-    <div className="w-full h-[700px] relative overflow-hidden">
+    // REMOVED aspect-video and fixed heights to allow the iframe to fill the space
+    <div className="w-full h-[800px] relative overflow-hidden">
       <iframe
         src={vizUrl}
         style={{
