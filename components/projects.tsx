@@ -37,7 +37,7 @@ function TableauEmbed({ url }: { url: string }) {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "rgba(15,15,20,0.7)", // darker box
+        background: "rgba(15,15,20,0.85)", // darker box
         padding: "24px",
       }}
     >
@@ -46,7 +46,7 @@ function TableauEmbed({ url }: { url: string }) {
         style={{
           width: "100%",
           maxWidth: "1200px",
-          height: "min(90vh, 900px)", // fully visible but responsive
+          height: "900px", // make sure this matches or exceeds your Tableau dashboard height
           border: "none",
         }}
         allowFullScreen
