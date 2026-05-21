@@ -25,16 +25,24 @@ interface PythonProject {
 }
 
 function TableauEmbed({ url }: { url: string }) {
+  // Logic to handle both standard and custom Tableau URLs
   const match = url.match(/\/viz\/([^/]+)\/([^/?]+)/)
   const vizUrl = match
     ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no&:display_count=n&:apiID=host0&:fit=yes`
     : `${url}?:embed=y&:showVizHome=no&:toolbar=yes&:display_count=n&:fit=yes`
 
   return (
-    <div className="w-full h-full min-h-[600px] relative">
+    <div className="w-full h-full relative overflow-hidden">
       <iframe
         src={vizUrl}
-        className="absolute inset-0 w-full h-full border-none"
+        style={{
+          width: '100%',
+          height: '100%',
+          border: 'none',
+          position: 'absolute',
+          top: 0,
+          left: 0
+        }}
         allowFullScreen
         title="Tableau Visualization"
       />
@@ -68,7 +76,7 @@ export function Projects() {
               </div>
             )}
             {valid ? (
-              <div className="w-full aspect-[16/10] bg-transparent">
+              <div className="w-full h-[700px] bg-transparent">
                 <TableauEmbed url={project.embedUrl} />
               </div>
             ) : (
@@ -149,6 +157,12 @@ export function Projects() {
               {pythonProjects.map((p, i) => <PythonCard key={i} project={p} />)}
             </div>
           </div>
+        )}
+        {!hasAnyProjects && (
+           <div className="text-center py-20">
+             <h2 className="text-2xl font-bold text-muted-foreground">No projects added yet.</h2>
+             <p className="mt-2 text-muted-foreground">Edit <code className="bg-secondary px-1 rounded">data/profile.json</code> to get started.</p>
+           </div>
         )}
       </div>
     </section>
