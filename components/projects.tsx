@@ -1,7 +1,8 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
-import { ExternalLink, Code2, Github, Star, User, Plus } from "lucide-react"
+import { ExternalLink, Code2, Github, Star, User, Plus, ChevronLeft, ChevronRight } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -11,7 +12,6 @@ interface TableauProject {
   title: string
   description: string
   embedUrl: string
-  thumbnail?: string
   author?: string
   sourceUrl?: string
 }
@@ -27,12 +27,11 @@ interface PythonProject {
 function TableauEmbed({ url }: { url: string }) {
   const match = url.match(/\/viz\/([^/]+)\/([^/?]+)/)
   const vizUrl = match
-    ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no&:device=desktop&:apiID=host0`
+    ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no`
     : `${url}?:embed=y&:showVizHome=no&:toolbar=yes`
 
-  // Assume Tableau dashboard is 1400x900. Adjust if yours is different.
-  const DASHBOARD_WIDTH = 1400
-  const DASHBOARD_HEIGHT = 900
+  const WIDTH = 1400
+  const HEIGHT = 900
 
   return (
     <div
@@ -41,15 +40,15 @@ function TableauEmbed({ url }: { url: string }) {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "rgba(15,15,20,0.9)", // darker box
+        background: "rgba(15,15,20,0.9)",
         padding: "24px",
       }}
     >
       <iframe
         src={vizUrl}
         style={{
-          width: `${DASHBOARD_WIDTH}px`,
-          height: `${DASHBOARD_HEIGHT}px`,
+          width: `${WIDTH}px`,
+          height: `${HEIGHT}px`,
           maxWidth: "100%",
           border: "none",
         }}
@@ -61,11 +60,24 @@ function TableauEmbed({ url }: { url: string }) {
 }
 
 export function Projects() {
-  const isValidEmbedUrl = (url: string) => {
-    return url && !url.includes("YOUR_TABLEAU") && !url.includes("YOUR_CURATED")
-  }
+  const myProjects: TableauProject[] = [
+    ...(profileData.myTableauProjects || []),
 
-  const myProjects: TableauProject[] = profileData.myTableauProjects || []
+    // ADDING YOUR TWO NEW VIZZES HERE
+    {
+      title: "Citizen Service Requests",
+      description: "A Tableau dashboard analyzing citizen service request patterns.",
+      embedUrl: "https://public.tableau.com/views/citizeenservicerequests/main",
+      sourceUrl: "https://public.tableau.com/app/profile/nur.adhyaksa.hamid/viz/citizeenservicerequests/main"
+    },
+    {
+      title: "Exploratory Dashboard",
+      description: "A Tableau exploratory dashboard by Ed Myers.",
+      embedUrl: "https://public.tableau.com/views/ExploratoryDashboard_16183795969740/Dashboard2",
+      sourceUrl: "https://public.tableau.com/app/profile/ed.myers/viz/ExploratoryDashboard_16183795969740/Dashboard2"
+    }
+  ]
+
   const curatedProjects: TableauProject[] = profileData.curatedTableauProjects || []
   const pythonProjects: PythonProject[] = profileData.pythonProjects || []
 
@@ -74,62 +86,13 @@ export function Projects() {
   const hasPythonProjects = pythonProjects.length > 0
   const hasAnyProjects = hasMyProjects || hasCuratedProjects || hasPythonProjects
 
-  const TableauCard = ({ project, isCurated = false }: { project: TableauProject; isCurated?: boolean }) => {
-    const valid = isValidEmbedUrl(project.embedUrl)
+  // CAROUSEL STATE
+  const [currentIndex, setCurrentIndex] = useState(0)
 
-    return (
-      <div style={{ width: "100%", maxWidth: "1400px", margin: "0 auto" }}>
-        <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full overflow-visible">
-          <CardContent className="p-0">
-            {isCurated && (
-              <div className="flex justify-end p-3">
-                <Badge className="bg-accent text-accent-foreground">
-                  <Star className="w-3 h-3 mr-1" />
-                  Curated
-                </Badge>
-              </div>
-            )}
+  const next = () => setCurrentIndex((prev) => (prev + 1) % myProjects.length)
+  const prev = () => setCurrentIndex((prev) => (prev - 1 + myProjects.length) % myProjects.length)
 
-            {valid ? (
-              <TableauEmbed url={project.embedUrl} />
-            ) : (
-              <div className="flex items-center justify-center bg-secondary/30" style={{ height: "600px" }}>
-                <p className="text-xs text-muted-foreground">Add Tableau URL in profile.json</p>
-              </div>
-            )}
-
-            <div className="p-6 border-t border-border/30">
-              <h3 className="text-lg font-semibold text-foreground mb-2">
-                {project.title}
-              </h3>
-              <p className="text-muted-foreground text-sm mb-3">
-                {project.description}
-              </p>
-
-              {isCurated && project.author && (
-                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
-                  <User className="w-3 h-3" />
-                  <span>By {project.author}</span>
-                </div>
-              )}
-
-              {valid && project.sourceUrl && (
-                <Link href={project.sourceUrl} target="_blank" rel="noopener noreferrer">
-                  <Button
-                    variant="outline"
-                    className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    Open in Tableau
-                  </Button>
-                </Link>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
+  const currentProject = myProjects[currentIndex]
 
   const PythonCard = ({ project }: { project: PythonProject }) => (
     <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 group overflow-hidden">
@@ -197,6 +160,7 @@ export function Projects() {
     <section id="projects" className="py-24">
       <div className="w-full mx-auto px-4">
 
+        {/* MY PROJECTS CAROUSEL */}
         {hasMyProjects && (
           <div className="mb-20">
             <div className="text-center mb-10">
@@ -208,14 +172,57 @@ export function Projects() {
               </p>
               <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
-            <div className="flex flex-col gap-8">
-              {myProjects.map((project, index) => (
-                <TableauCard key={index} project={project} />
-              ))}
+
+            <div className="relative w-full max-w-[1400px] mx-auto">
+
+              {/* LEFT ARROW */}
+              <button
+                onClick={prev}
+                className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-3 rounded-full z-10"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+
+              {/* CURRENT VIZ */}
+              <Card className="bg-card/50 border-border/50 backdrop-blur-sm w-full overflow-visible">
+                <CardContent className="p-0">
+                  <TableauEmbed url={currentProject.embedUrl} />
+
+                  <div className="p-6 border-t border-border/30">
+                    <h3 className="text-lg font-semibold text-foreground mb-2">
+                      {currentProject.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm mb-3">
+                      {currentProject.description}
+                    </p>
+
+                    {currentProject.sourceUrl && (
+                      <Link href={currentProject.sourceUrl} target="_blank" rel="noopener noreferrer">
+                        <Button
+                          variant="outline"
+                          className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          Open in Tableau
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* RIGHT ARROW */}
+              <button
+                onClick={next}
+                className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-3 rounded-full z-10"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
             </div>
           </div>
         )}
 
+        {/* CURATED PROJECTS */}
         {hasCuratedProjects && (
           <div className="mb-20">
             <div className="text-center mb-10">
@@ -227,14 +234,55 @@ export function Projects() {
               </p>
               <div className="w-20 h-1 bg-accent mx-auto rounded-full" />
             </div>
+
             <div className="flex flex-col gap-8">
               {curatedProjects.map((project, index) => (
-                <TableauCard key={index} project={project} isCurated />
+                <Card key={index} className="bg-card/50 border-border/50 backdrop-blur-sm w-full overflow-visible max-w-[1400px] mx-auto">
+                  <CardContent className="p-0">
+                    <div className="flex justify-end p-3">
+                      <Badge className="bg-accent text-accent-foreground">
+                        <Star className="w-3 h-3 mr-1" />
+                        Curated
+                      </Badge>
+                    </div>
+
+                    <TableauEmbed url={project.embedUrl} />
+
+                    <div className="p-6 border-t border-border/30">
+                      <h3 className="text-lg font-semibold text-foreground mb-2">
+                        {project.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm mb-3">
+                        {project.description}
+                      </p>
+
+                      {project.author && (
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
+                          <User className="w-3 h-3" />
+                          <span>By {project.author}</span>
+                        </div>
+                      )}
+
+                      {project.sourceUrl && (
+                        <Link href={project.sourceUrl} target="_blank" rel="noopener noreferrer">
+                          <Button
+                            variant="outline"
+                            className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                            Open in Tableau
+                          </Button>
+                        </Link>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           </div>
         )}
 
+        {/* PYTHON PROJECTS */}
         {hasPythonProjects && (
           <div className="mb-8">
             <div className="text-center mb-10">
@@ -246,6 +294,7 @@ export function Projects() {
               </p>
               <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {pythonProjects.map((project, index) => (
                 <PythonCard key={index} project={project} />
@@ -254,6 +303,7 @@ export function Projects() {
           </div>
         )}
 
+        {/* EMPTY STATE */}
         {!hasAnyProjects && (
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Projects</h2>
