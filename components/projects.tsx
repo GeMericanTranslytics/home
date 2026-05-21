@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useRef } from "react"
 import Link from "next/link"
 import { ExternalLink, Code2, Github, Star, User, Plus } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
