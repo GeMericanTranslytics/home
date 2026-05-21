@@ -31,7 +31,7 @@ function TableauEmbed({ url }: { url: string }) {
     : `${url}?:embed=y&:showVizHome=no&:toolbar=yes`
 
   return (
-    <div style={{ position: "relative", width: "100%", paddingBottom: "75%", height: 0, overflow: "hidden" }}>
+    <div style={{ position: "relative", width: "100%", paddingBottom: "50%", height: 0, overflow: "hidden" }}>
       <iframe
         src={vizUrl}
         style={{
@@ -67,9 +67,9 @@ export function Projects() {
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
-      <div style={{ width: "75%", margin: "0 auto" }}>
-        <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full overflow-hidden">
-          <CardContent className="p-0">
+      <div className="w-full max-w-6xl mx-auto flex flex-col items-center justify-center px-4">
+        <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full overflow-hidden mx-auto">
+          <CardContent className="p-0 w-full flex flex-col justify-center">
             {isCurated && (
               <div className="flex justify-end p-3">
                 <Badge className="bg-accent text-accent-foreground">
@@ -80,14 +80,16 @@ export function Projects() {
             )}
 
             {valid ? (
-              <TableauEmbed url={project.embedUrl} />
+              <div className="w-full flex justify-center items-center">
+                <TableauEmbed url={project.embedUrl} />
+              </div>
             ) : (
               <div className="flex items-center justify-center bg-secondary/30" style={{ height: "600px" }}>
                 <p className="text-xs text-muted-foreground">Add Tableau URL in profile.json</p>
               </div>
             )}
 
-            <div className="p-6 border-t border-border/30">
+            <div className="p-6 border-t border-border/30 w-full">
               <h3 className="text-lg font-semibold text-foreground mb-2">
                 {project.title}
               </h3>
@@ -183,11 +185,11 @@ export function Projects() {
   )
 
   return (
-    <section id="projects" className="py-24">
-      <div className="w-full mx-auto px-4">
+    <section id="projects" className="py-24 w-full">
+      <div className="w-full mx-auto px-4 flex flex-col justify-center items-center">
 
         {hasMyProjects && (
-          <div className="mb-20">
+          <div className="mb-20 w-full flex flex-col items-center justify-center">
             <div className="text-center mb-10">
               <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
                 {profileData.sectionTitles?.myTableauProjects || "My Tableau Projects"}
@@ -197,7 +199,7 @@ export function Projects() {
               </p>
               <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-8 w-full items-center justify-center">
               {myProjects.map((project, index) => (
                 <TableauCard key={index} project={project} />
               ))}
@@ -206,7 +208,7 @@ export function Projects() {
         )}
 
         {hasCuratedProjects && (
-          <div className="mb-20">
+          <div className="mb-20 w-full flex flex-col items-center justify-center">
             <div className="text-center mb-10">
               <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
                 {profileData.sectionTitles?.curatedTableauProjects || "Curated Tableau Visualizations"}
@@ -216,7 +218,7 @@ export function Projects() {
               </p>
               <div className="w-20 h-1 bg-accent mx-auto rounded-full" />
             </div>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-8 w-full items-center justify-center">
               {curatedProjects.map((project, index) => (
                 <TableauCard key={index} project={project} isCurated />
               ))}
@@ -225,7 +227,7 @@ export function Projects() {
         )}
 
         {hasPythonProjects && (
-          <div className="mb-8">
+          <div className="mb-8 w-full">
             <div className="text-center mb-10">
               <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
                 {profileData.sectionTitles?.pythonProjects || "Python Projects"}
@@ -244,7 +246,7 @@ export function Projects() {
         )}
 
         {!hasAnyProjects && (
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 w-full">
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Projects</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
               Add your Tableau visualizations and Python projects to showcase your work
