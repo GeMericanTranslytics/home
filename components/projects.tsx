@@ -27,14 +27,13 @@ interface PythonProject {
 function TableauEmbed({ url }: { url: string }) {
   const match = url.match(/\/viz\/([^/]+)\/([^/?]+)/)
   
-  /* Added display_count=n parameter to strip away extra padding algorithms */
+  /* Reverted to standard &: parameters for cleaner iframe gateway parsing */
   const vizUrl = match
-    ? `https://public.tableau.com/views/${match[1]}/${match[2]}?%3Aembed=y&%3AshowVizHome=no&%3Atoolbar=yes&%3Atabs=no&%3Asize=100%25,100%25&%3Adisplay_count=n&%3AapiID=host0`
-    : `${url}?%3Aembed=y&%3AshowVizHome=no&%3Atoolbar=yes&%3Asize=100%25,100%25&%3Adisplay_count=n`
+    ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no&:display_count=n&:apiID=host0`
+    : `${url}?:embed=y&:showVizHome=no&:toolbar=yes&:display_count=n`
 
   return (
-    /* FIX: Deleted the fixed pixel heights (h-[800px]). Replaced with a fluid aspect ratio (aspect-[16/10] down to 16/9) to shrink-wrap the container directly against the dashboard's natural borders. */
-    <div className="w-full aspect-[4/3] md:aspect-[16/10] lg:aspect-[16/9] relative overflow-hidden flex justify-center items-center">
+    <div className="w-full aspect-[4/3] md:aspect-[16/10] relative overflow-hidden flex justify-center items-center">
       <iframe
         src={vizUrl}
         style={{
@@ -70,7 +69,8 @@ export function Projects() {
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
-      <div className="w-[70vw] max-w-full mx-auto flex flex-col items-center justify-center px-4">
+      /* FIX: Added max-w-[1200px] as a hard limit. This acts as a physical wall matching typical Tableau fixed-sizes, so your container never outgrows the charts when zooming out. */
+      <div className="w-[95vw] lg:w-[85vw] xl:w-[70vw] max-w-[1200px] mx-auto flex flex-col items-center justify-center px-4 mb-8">
         <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full overflow-hidden mx-auto">
           <CardContent className="p-0 w-full flex flex-col justify-center items-center text-center">
             {isCurated && (
@@ -126,9 +126,9 @@ export function Projects() {
   }
 
   const PythonCard = ({ project }: { project: PythonProject }) => (
-    <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 group overflow-hidden">
-      <CardContent className="p-0">
-        <div className="relative aspect-[2/1] bg-secondary/30 flex items-center justify-center">
+    <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 group overflow-hidden h-full flex flex-col">
+      <CardContent className="p-0 flex-grow flex flex-col">
+        <div className="relative aspect-[2/1] bg-secondary/30 flex items-center justify-center shrink-0">
           <div className="text-center p-6">
             <Code2 className="w-12 h-12 text-primary/50 mx-auto mb-2" />
             <div className="flex flex-wrap gap-1.5 justify-center">
@@ -142,11 +142,11 @@ export function Projects() {
           <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
 
-        <div className="p-5">
+        <div className="p-5 flex flex-col flex-grow">
           <h3 className="text-base font-semibold text-foreground mb-2 line-clamp-1">
             {project.title}
           </h3>
-          <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
+          <p className="text-muted-foreground text-sm mb-3 flex-grow line-clamp-2">
             {project.description}
           </p>
 
@@ -161,7 +161,7 @@ export function Projects() {
             </ul>
           )}
 
-          <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
+          <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="mt-auto">
             <Button
               variant="outline"
               className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all text-sm"
@@ -176,8 +176,8 @@ export function Projects() {
   )
 
   const EmptyAddCard = ({ type }: { type: string }) => (
-    <Card className="bg-card/30 border-border/30 border-dashed hover:border-primary/30 transition-all duration-300">
-      <CardContent className="p-8 text-center">
+    <Card className="bg-card/30 border-border/30 border-dashed hover:border-primary/30 transition-all duration-300 h-full">
+      <CardContent className="p-8 text-center h-full flex flex-col items-center justify-center">
         <Plus className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
         <p className="text-sm text-muted-foreground mb-2">Add your first {type}</p>
         <p className="text-xs text-muted-foreground">
@@ -202,7 +202,7 @@ export function Projects() {
               </p>
               <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
-            <div className="flex flex-col gap-8 w-full items-center justify-center">
+            <div className="flex flex-col w-full items-center justify-center">
               {myProjects.map((project, index) => (
                 <TableauCard key={index} project={project} />
               ))}
@@ -221,7 +221,7 @@ export function Projects() {
               </p>
               <div className="w-20 h-1 bg-accent mx-auto rounded-full" />
             </div>
-            <div className="flex flex-col gap-8 w-full items-center justify-center">
+            <div className="flex flex-col w-full items-center justify-center">
               {curatedProjects.map((project, index) => (
                 <TableauCard key={index} project={project} isCurated />
               ))}
@@ -240,7 +240,7 @@ export function Projects() {
               </p>
               <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
               {pythonProjects.map((project, index) => (
                 <PythonCard key={index} project={project} />
               ))}
@@ -254,7 +254,7 @@ export function Projects() {
             <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
               Add your Tableau visualizations and Python projects to showcase your work
             </p>
-            <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto px-4">
               <EmptyAddCard type="Tableau project" />
               <EmptyAddCard type="curated visualization" />
               <EmptyAddCard type="Python project" />
