@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect } from "react"
 import Link from "next/link"
 import { ExternalLink, Code2, Github, Star, User, Plus } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
@@ -28,34 +27,29 @@ interface PythonProject {
 function TableauEmbed({ url }: { url: string }) {
   const match = url.match(/\/viz\/([^/]+)\/([^/?]+)/)
   const vizUrl = match
-    ? `https://public.tableau.com/views/${match[1]}/${match[2]}`
-    : url
+    ? `https://public.tableau.com/views/${match[1]}/${match[2]}?:embed=y&:showVizHome=no&:toolbar=yes&:tabs=no&:device=desktop&:apiID=host0`
+    : `${url}?:embed=y&:showVizHome=no&:toolbar=yes`
 
   return (
-    <div style={{ width: "100%", height: "900px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <tableau-viz
+    <div style={{ position: "relative", width: "100%", paddingBottom: "75%", height: 0, overflow: "hidden" }}>
+      <iframe
         src={vizUrl}
-        width="100%"
-        height="900"
-        hide-tabs
-        toolbar="bottom"
-        style={{ display: "block", margin: "0 auto" }}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          border: "none",
+        }}
+        allowFullScreen
+        title="Tableau Visualization"
       />
     </div>
   )
 }
 
 export function Projects() {
-  useEffect(() => {
-    const script = document.createElement("script")
-    script.src = "https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"
-    script.type = "module"
-    document.head.appendChild(script)
-    return () => {
-      document.head.removeChild(script)
-    }
-  }, [])
-
   const isValidEmbedUrl = (url: string) => {
     return url && !url.includes("YOUR_TABLEAU") && !url.includes("YOUR_CURATED")
   }
@@ -73,10 +67,9 @@ export function Projects() {
     const valid = isValidEmbedUrl(project.embedUrl)
 
     return (
-      <div style={{ width: "70%", margin: "0 auto" }}>
-        <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 overflow-visible w-full">
+      <div style={{ width: "75%", margin: "0 auto" }}>
+        <Card className="bg-card/50 border-border/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-300 w-full overflow-hidden">
           <CardContent className="p-0">
-            {/* Badge */}
             {isCurated && (
               <div className="flex justify-end p-3">
                 <Badge className="bg-accent text-accent-foreground">
@@ -86,18 +79,14 @@ export function Projects() {
               </div>
             )}
 
-            {/* Viz - full width, no clipping */}
-            <div style={{ width: "100%", minHeight: "900px" }}>
-              {valid ? (
-                <TableauEmbed url={project.embedUrl} />
-              ) : (
-                <div className="flex items-center justify-center bg-secondary/30" style={{ height: "900px" }}>
-                  <p className="text-xs text-muted-foreground">Add Tableau URL in profile.json</p>
-                </div>
-              )}
-            </div>
+            {valid ? (
+              <TableauEmbed url={project.embedUrl} />
+            ) : (
+              <div className="flex items-center justify-center bg-secondary/30" style={{ height: "600px" }}>
+                <p className="text-xs text-muted-foreground">Add Tableau URL in profile.json</p>
+              </div>
+            )}
 
-            {/* Footer */}
             <div className="p-6 border-t border-border/30">
               <h3 className="text-lg font-semibold text-foreground mb-2">
                 {project.title}
@@ -197,7 +186,6 @@ export function Projects() {
     <section id="projects" className="py-24">
       <div className="w-full mx-auto px-4">
 
-        {/* My Tableau Projects */}
         {hasMyProjects && (
           <div className="mb-20">
             <div className="text-center mb-10">
@@ -217,7 +205,6 @@ export function Projects() {
           </div>
         )}
 
-        {/* Curated Tableau Projects */}
         {hasCuratedProjects && (
           <div className="mb-20">
             <div className="text-center mb-10">
@@ -237,7 +224,6 @@ export function Projects() {
           </div>
         )}
 
-        {/* Python Projects */}
         {hasPythonProjects && (
           <div className="mb-8">
             <div className="text-center mb-10">
@@ -257,7 +243,6 @@ export function Projects() {
           </div>
         )}
 
-        {/* No Projects State */}
         {!hasAnyProjects && (
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Projects</h2>
